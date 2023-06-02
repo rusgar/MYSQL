@@ -44,12 +44,9 @@ select  ciudad, max(categoría) as ' Maximo de categoria'
 -- Es decir, el mismo cliente puede haber realizado varios pedidos de diferentes cantidades el mismo día.
 --  Se pide que se calcule cuál es el pedido de máximo valor para cada uno de los días en los que un cliente ha realizado un pedido. 
 -- Muestra el identificador del cliente, nombre, apellidos, la fecha y el valor de la cantidad.
- select pedido.id_cliente, cliente.nombre, CONCAT_WS(' - ',cliente.apellido1, cliente.apellido2) as apellido , pedido.fecha, max(pedido.total)
+ select pedido.id_cliente, cliente.nombre, CONCAT_WS(' - ',cliente.apellido1, cliente.apellido2) as apellido , pedido.fecha, concat(max(pedido.total), " €") as 'MAX'
  from cliente inner join pedido on pedido.id_cliente = cliente.id group by pedido.fecha, pedido.id_cliente;
  
- select pedido.id_cliente, cliente.nombre, CONCAT_WS(' - ',cliente.apellido1, cliente.apellido2) as apellido , pedido.fecha, max(pedido.total)
- from cliente inner join pedido on pedido.id_cliente = cliente.id group by pedido.fecha, pedido.id_cliente;
-
 -- 9. Calcula cuál es el máximo valor de los pedidos realizados durante el mismo día para cada uno de los clientes, 
 -- teniendo en cuenta que sólo queremos mostrar aquellos pedidos que superen la cantidad de 2000 €.
  select pedido.id_cliente, cliente.nombre, CONCAT_WS(' - ',cliente.apellido1, cliente.apellido2) as apellido , pedido.fecha, concat(max(pedido.total), '  €')
