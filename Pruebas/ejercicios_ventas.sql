@@ -94,5 +94,12 @@ group by cliente.id, cliente.nombre, cliente.apellido1, cliente.apellido2;
 
 
 -- 14. Devuelve cuál ha sido el pedido de máximo valor que se ha realizado cada año.
+SELECT YEAR(pedido.fecha) as 'Año', max(pedido.total) as 'Maximo Valor' 
+ from pedido 
+group by year(pedido.fecha);
+ 
 
 -- 15. Devuelve el número total de pedidos que se han realizado cada año.
+SELECT YEAR(pedido.fecha) as 'Año', count(pedido.id) as 'Pedidos'
+ from pedido
+ group by year(pedido.fecha);
