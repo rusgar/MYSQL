@@ -38,13 +38,13 @@ WHERE presupuesto >= All
     
     select nombre, presupuesto    
 FROM departamento
-WHERE presupuesto = Any
+WHERE presupuesto >= Any
   (SELECT   
-    presupuesto  FROM departamento where presupuesto = 375000 );
+    presupuesto  FROM departamento where  presupuesto = 150000  );
 
 -- 5. Devuelve el nombre del departamento con menor presupuesto y la cantidad que tiene asignada. Sin hacer uso de MIN, ORDER BY ni LIMIT.
 
-select nombre, presupuesto    
+select nombre, presupuesto  as 'Menor Prosupuesto'  
 FROM departamento
 WHERE presupuesto <= All
   (SELECT   
@@ -52,13 +52,15 @@ WHERE presupuesto <= All
     
     
 -- 5bis. Devuelve el nombre del departamento con menor gasto y la cantidad que tiene asignada. Sin hacer uso de MIN, ORDER BY ni LIMIT.    
-    select nombre, presupuesto    
+select nombre, gastos as 'Menor Gasto'
 FROM departamento
 WHERE gastos <= All
   (SELECT   
     gastos  FROM departamento );
 
 -- 6. Devuelve los nombres de los departamentos que tienen empleados asociados. (Utilizando ALL o ANY).
+
+
 
 -- 7. Devuelve los nombres de los departamentos que no tienen empleados asociados. (Utilizando ALL o ANY).
 
