@@ -4,61 +4,21 @@
 use tienda;
 -- 1. Devuelve todos los productos del fabricante Lenovo. (Sin utilizar INNER JOIN).
 
-SELECT * 
-FROM producto
-WHERE codigo_fabricante = (   SELECT codigo
-                              FROM fabricante 
-                              WHERE nombre = 'Lenovo');
+SELECT * FROM producto
+WHERE codigo_fabricante = (   SELECT codigo   FROM fabricante   WHERE nombre = 'Lenovo');
                             
 -- 2. Devuelve todos los datos de los productos que tienen el mismo precio que el producto más caro del fabricante Lenovo (Sin utilizar INNER JOIN)
 
-SELECT   *   
-FROM producto 
-WHERE   precio   =   (  SELECT MAX(precio)
-                        FROM producto
-                        WHERE producto.codigo_fabricante = (  SELECT codigo  FROM fabricante   WHERE nombre = 'Lenovo'));
+SELECT   *   FROM producto 
+WHERE   precio   =   (   SELECT   MAX(precio)   FROM producto  WHERE producto.codigo_fabricante = (  SELECT codigo  FROM fabricante   WHERE nombre = 'Lenovo'))
                                                
 -- 3. Lista el nombre del producto más caro del fabricante 'Lenovo'
 
-select producto.nombre
-FROM   producto  WHERE precio=  (SELECT MAX(precio)
-                         FROM  producto,fabricante 
-                         WHERE fabricante.nombre = "Lenovo");
-
 -- 4. Lista el nombre del producto más barato de Hewlett-Packard
-
-SELECT   nombre
-FROM   producto 
-WHERE  precio= (SELECT   MIN(precio)   
-         FROM producto, fabricante 
-         WHERE fabricante.nombre = "Hewlett-Packard") LIMIT 1;
 
 -- 5. Devuelve todos los productos de la base de datos que tienen un precio mayor o igual al producto más caro del fabricante Lenovo
 
-SELECT   nombre, precio  
- FROM   producto   
- WHERE   precio   >=   (SELECT   MAX(precio)
-                        FROM producto
-                        WHERE codigo_fabricante= (  SELECT codigo  FROM fabricante   WHERE nombre = 'Lenovo'));
-
 -- 6. Lista todos los productos del fabricante Asus que tienen un precio superior al precio medio de todos los productos.
-
-                 
-select * 
-from producto
-where codigo_fabricante = (select codigo
-						from fabricante
-                        where nombre = 'Asus') and  precio > ( select avg(precio)
-                                                              from producto where codigo_fabricante= (select codigo
-                                                                                                      from fabricante
-                                                                                                      where nombre = 'Asus'));
--- 6bisss. Lista todos los productos de los fabricante distintos a  Asus que tienen un precio superior al producto Asus mas caro.
-SELECT * 
-FROM producto
- WHERE precio > (SELECT AVG(precio) 
-                 FROM producto
-                 WHERE codigo_fabricante <> '1') and (  SELECT codigo  FROM fabricante   WHERE nombre = 'Asus');
-                                                                                                      
                             
 -- 6 (II parte) . Lista todos los productos del fabricante Asus que tienen un precio superior al precio medio de todos SUS productos Asus.
 

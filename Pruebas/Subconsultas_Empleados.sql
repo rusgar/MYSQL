@@ -103,7 +103,8 @@ where codigo not in ( select ifnull(codigo_departamento,0 )
  select departamento.nombre as 'Departamentos'
  from departamento
  where  exists (select empleado.codigo_departamento
-                from empleado where empleado.codigo_departamento=departamento.codigo  );
+                from empleado
+                where empleado.codigo_departamento=departamento.codigo  );
 
 
 -- 11. Devuelve los nombres de los departamentos que no tienen empleados asociados. (Utilizando EXISTS o NOT EXISTS).
