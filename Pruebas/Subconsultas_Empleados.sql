@@ -62,22 +62,53 @@ WHERE gastos <= All
     gastos  FROM departamento );    
 
 -- 6. Devuelve los nombres de los departamentos que tienen empleados asociados. (Utilizando ALL o ANY).
-select departamento.nombre from departamento where departamento.codigo = any (select empleado.codigo_departamento from empleado);
+ select departamento
+ from departamento
+ where departamento.codigo = any (select empleado.codigo_departamento from empleado);
+ 
+ /* realiazado con el Inner Join
+ select distinct departamento.nombre, empleado.codigo_departamento
+ from departamento join empleado on departamento.codigo = empleado.codigo_departamento;*/
 
 -- 7. Devuelve los nombres de los departamentos que no tienen empleados asociados. (Utilizando ALL o ANY).
-select distinct departamento.nombre from departamento right join empleado on departamento.codigo != empleado.codigo_departamento 
-where departamento.codigo != all (select empleado.codigo_departamento from empleado where empleado.codigo_departamento is not null);
+select distinct departamento.nombre as 'Departamentos'
+from departamento right join empleado on departamento.codigo <> empleado.codigo_departamento 
+where departamento.codigo != all (select empleado.codigo_departamento from empleado where empleado.codigo_departamento);
+
+select  departamento.nombre as 'Departamentos'
+from departamento  
+where departamento.codigo <> all (select empleado.codigo_departamento from empleado where empleado.codigo_departamento  );
+
+select nombre as 'Departamentos'
+from departamento
+where codigo <> all( select ifnull(codigo_departamento,0 )from empleado where codigo_departamento);
 
  -- Subconsultas con IN y NOT IN
 -- 8. Devuelve los nombres de los departamentos que tienen empleados asociados. (Utilizando IN o NOT IN).
-select departamento.nombre from departamento where departamento.codigo in (select empleado.codigo_departamento from empleado);
+ select nombre as 'Departamentos'
+ from departamento
+ where codigo in (select codigo_departamento
+                  from empleado);
 
 -- 9. Devuelve los nombres de los departamentos que no tienen empleados asociados. (Utilizando IN o NOT IN).
-select distinct departamento.nombre from departamento right join empleado on departamento.codigo != empleado.codigo_departamento 
-where departamento.codigo not in (select empleado.codigo_departamento from empleado where empleado.codigo_departamento is not null);
+
+select  nombre as 'Departamentos'
+from departamento  
+where codigo not in ( select ifnull(codigo_departamento,0 )
+                      from empleado
+                      where codigo_departamento );
 
 -- Subconsultas con EXISTS y NOT EXISTS
 -- 10. Devuelve los nombres de los departamentos que tienen empleados asociados. (Utilizando EXISTS o NOT EXISTS).
+ select departamento.nombre as 'Departamentos'
+ from departamento
+ where  exists (select empleado.codigo_departamento
+                from empleado where empleado.codigo_departamento=departamento.codigo  );
 
 
 -- 11. Devuelve los nombres de los departamentos que no tienen empleados asociados. (Utilizando EXISTS o NOT EXISTS).
+
+ select departamento.nombre as 'Departamentos'
+ from departamento
+ where not exists (select empleado.codigo_departamento
+                  from empleado where empleado.codigo_departamento=departamento.codigo  );
