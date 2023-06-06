@@ -31,3 +31,26 @@ WHERE	p.PrecioUnidad > (SELECT	avg(p1.PrecioUnidad)
 						  FROM		Productos as p1
 						  WHERE	p1.IdCategoria = p.IdCategoria)
 ORDER by p.PrecioUnidad DESC;
+
+/*
+	Devolver el codigo de categoria y la media del precio
+	de sus productos, pero solo en aquellos casos en que
+	dicha media sea superior a 20, se ignoraran los productos 
+	descartados	
+*/
+
+SELECT	IdCategoria, avg(PrecioUnidad) as Media
+FROM	Productos
+WHERE	Suspendido > 0
+GROUP by IdCategoria
+HAVING avg(PrecioUnidad) > 5 ;
+
+-- -- 1)	Mostrar el número de pedido y el país del cliente de los pedidos de Julio del año 1996
+select Detallespedidos.Cantidad , Clientes.Pais from Clientes inner join Pedidos on pedidos.IdCliente = Clientes.IdCliente
+inner join Detallespedidos on Detallespedidos.IdPedido = Pedidos.IdPedido
+where Pedidos.FechaPedido >='1996/07/01' and Pedidos.FechaPedido
+<='1996/07/31';
+
+-- 2)	Mostrar el importe total de los pedidos 10501 y 10503 usando únicamente la tabla detalles.
+select * from detallespedidos where IdPedido in ('10501' , '10503');
+
