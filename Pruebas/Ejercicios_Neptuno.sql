@@ -54,3 +54,44 @@ where Pedidos.FechaPedido >='1996/07/01' and Pedidos.FechaPedido
 -- 2)	Mostrar el importe total de los pedidos 10501 y 10503 usando únicamente la tabla detalles.
 select * from detallespedidos where IdPedido in ('10501' , '10503');
 
+-- 3)	¿Cuánto se factura Agosto 1996?
+
+select sum(Detallespedidos.Cantidad * Detallespedidos.PrecioUnidad)	as 'Facturacion de Agosto' 
+from Detallespedidos inner join Pedidos on Detallespedidos.IdPedido = Pedidos.IdPedido
+where Pedidos.FechaPedido >='1996/08/01' and Pedidos.FechaPedido <='1996/08/30';
+
+-- 4)	Los pedidos que hizo la empleada NANCY.
+
+select IdPedido, nombre
+from Pedidos
+inner join Empleados on Pedidos.IdEmpleado = Empleados.IdEmpleado 
+where	Empleados.Nombre = 'Nancy';
+
+-- 5)	Mostrar los pedidos de ANTON (código cliente).
+
+select Pedidos.IdPedido , Clientes.IdCliente 
+from Pedidos inner join Clientes on Clientes.IdCliente = Pedidos.IdCliente 
+where Clientes.IdCliente = 'Anton';
+
+
+-- 6)	Clientes que pidieron queso en mayo de 1997.
+
+select Productos.NombreProducto , IdCliente
+from Productos
+inner join Detallespedidos on Detallespedidos.IdProducto = Productos.IdProducto
+inner join Pedidos on Pedidos.IdPedido = Detallespedidos.IdPedido 
+where NombreProducto like '%Queso%' and Pedidos.FechaPedido between '1997/05/01'  and '1997/05/31';
+
+
+-- 7)	Cuántos productos hay de cada categoría y el precio medio
+
+
+select COUNT(IdCategoria) as 'Productos hay por categoria', 
+AVG(PrecioUnidad) as 'Precio Medio'
+from Productos
+group by IdCategoria;
+
+
+
+
+
