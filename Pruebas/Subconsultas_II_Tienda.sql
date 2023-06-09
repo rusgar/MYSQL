@@ -100,24 +100,70 @@ WHERE id <> ALL ( SELECT id_fabricante FROM producto);
 -- Subconsultas con IN y NOT IN
 -- 5. Devuelve los nombres de los fabricantes que tienen productos asociados. (Utilizando IN o NOT IN).
 
+ SELECT nombre 
+ FROM fabricante
+ WHERE id IN (SELECT id_fabricante FROM producto); 
+
 -- 6. Devuelve los nombres de los fabricantes que no tienen productos asociados. (Utilizando IN o NOT IN).
+
+ SELECT nombre 
+ FROM fabricante
+ WHERE id NOT IN (SELECT id_fabricante FROM producto); 
 
 -- Subconsultas con EXISTS y NOT EXISTS
 -- 1. Devuelve los nombres de los fabricantes que tienen productos asociados. (Utilizando EXISTS o NOT EXISTS).
 
+SELECT nombre
+ FROM fabricante
+ WHERE EXISTS ( SELECT id_fabricante
+                FROM producto 
+				WHERE producto.id_fabricante = fabricante.id);
+
 
 -- 2. Devuelve los nombres de los fabricantes que no tienen productos asociados. (Utilizando EXISTS o NOT EXISTS).
+
+SELECT nombre
+ FROM fabricante
+ WHERE NOT EXISTS ( SELECT id_fabricante
+                    FROM producto
+                    WHERE producto.id_fabricante = fabricante.id);
 
 
 --  Subconsultas correlacionadas
 -- 1. Lista el nombre de cada fabricante con el nombre y el precio de su producto más caro.
 
+SELECT producto.nombre, producto.precio, fabricante.nombre
+FROM producto INNER JOIN fabricante ON producto.id_fabricante = fabricante.id 
+WHERE producto.precio = ( SELECT MAX(precio) 
+                          FROM producto 
+                          WHERE id_fabricante = fabricante.id ) ;
+
 -- 2. Devuelve un listado de todos los productos que tienen un precio mayor o igual a la media de todos los productos de su mismo fabricante.
 
+SELECT * 
+FROM producto AS pre_mayor
+WHERE precio >= (SELECT AVG(precio) 
+                 FROM producto AS pre_avg
+                 WHERE pre_mayor.id_fabricante = pre_avg.id_fabricante);
+
 -- 3. Lista el nombre del producto más caro del fabricante Lenovo.
+
+SELECT producto.nombre
+ FROM fabricante INNER JOIN producto ON fabricante.id = producto.id_fabricante 
+ WHERE fabricante.nombre = 'Lenovo' AND producto.precio = ( SELECT MAX(precio) 
+                                                            FROM producto 
+                                                            WHERE id_fabricante = fabricante.id);
                     
 -- Subconsultas (En la cláusula HAVING)
 -- 1. Devuelve un listado con todos los nombres de los fabricantes que tienen el mismo número de productos que el fabricante Lenovo.
 -- Pasos previos:
 -- devolver el código de fabricante y el número de productos de cada fabricante
 -- devolver el número de productos del fabricante lenovo
+
+SELECT fabricante.nombre, COUNT(producto.id) as 'Listado'
+FROM fabricante INNER JOIN producto ON fabricante.id = producto.id_fabricante 
+GROUP BY fabricante.id HAVING COUNT(producto.id) >= ( SELECT COUNT(producto.id) 
+                                                              FROM fabricante INNER JOIN producto ON fabricante.id = producto.id_fabricante 
+                                                              WHERE fabricante.nombre = 'Lenovo');
+												
+                                            
