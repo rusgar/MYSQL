@@ -1,0 +1,23 @@
+-- CREO LA BD Y LAS TABLAS 
+
+drop database if exists test;
+create database test;
+use test;
+create table alumnos(
+	id int unsigned primary key auto_increment,
+    nombre varchar(50),
+    apellido1 varchar (50),
+    apellido2 varchar(50),
+    fecha_nacimiento date
+    );
+
+
+-- AÑADO INFORMACIÓN A LAS TABLAS
+insert into alumnos(nombre, apellido1, apellido2, fecha_nacimiento) values ('Pepa', 'Rodruelo', 'Virnández', '1800-8-28');
+insert into alumnos(nombre, apellido1, apellido2, fecha_nacimiento) values ('Rocio', 'Rodriguez', 'Virnández', '1700-5-10');
+insert into alumnos(nombre, apellido1, apellido2, fecha_nacimiento) values ('Dionisio', 'Alvarez', 'Virnández', '1651-7-11');
+insert into alumnos(nombre, apellido1, apellido2, fecha_nacimiento) values ('Angel', 'García', 'Virnández', '1856-2-10');
+
+-- Añadir una nueva columna "edad" a la tabla "alumnos"
+ALTER TABLE alumnos
+ADD edad INT;
