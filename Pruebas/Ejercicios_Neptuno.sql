@@ -4,14 +4,18 @@
 
 
 
--- -- 1)	Mostrar el número de pedido y la cantidad del el país del cliente de los pedidos de Julio del año 1996
-select Detallespedidos.IdPedido ,Detallespedidos.Cantidad, Clientes.Pais
-from Clientes inner join Pedidos on pedidos.IdCliente = Clientes.IdCliente
-inner join Detallespedidos on Detallespedidos.IdPedido = Pedidos.IdPedido
-where Pedidos.FechaPedido >='1996/07/01' and Pedidos.FechaPedido <='1996/07/31';
+-- -- 1)	Calcular el total de cada pedido con su identidficador
+SELECT	IdPedido, sum(PrecioUnidad * Cantidad) as total
+FROM	detallespedidos
+GROUP by IdPedido;
+
+
 
 -- 2)	Mostrar el importe total de los pedidos 10501 y 10503 usando únicamente la tabla detalles.
-select * from detallespedidos where IdPedido in ('10501' , '10503');
+select * 
+from detallespedidos 
+where IdPedido in ('10501' , '10503');
+
 
 -- 3)	¿Cuánto se factura Agosto 1996?
 
@@ -51,17 +55,18 @@ group by productos.IdCategoria  Order by   AVG(productos.PrecioUnidad) asc;
 
 
 -- 8)	Mostar el nombre de los empleados  y ordenarlos de mayor a menor junto con su facturacion
-select empleados.nombre, truncate(SUM(Detallespedidos.PrecioUnidad*Detallespedidos.Cantidad),2) as ventas
+select empleados.nombre, truncate(SUM(Detallespedidos.PrecioUnidad*Detallespedidos.Cantidad),2) as 'ventas'
 from Detallespedidos inner join Pedidos on Pedidos.IdPedido = Detallespedidos.IdPedido
 inner join empleados on Pedidos.IdEmpleado = empleados.IdEmpleado
-group by empleados.nombre order by  truncate(SUM(Detallespedidos.PrecioUnidad*Detallespedidos.Cantidad),2) desc;
+group by empleados.nombre order by  'ventas' desc;
 
 
 
--- 9) Calcular el total de cada pedido con su identidficador
-SELECT	IdPedido, sum(PrecioUnidad * Cantidad) as total
-FROM	detallespedidos
-GROUP by IdPedido;
+-- 9)  Mostrar el número de pedido y la cantidad del el país del cliente de los pedidos de Julio del año 1996
+select Detallespedidos.IdPedido ,Detallespedidos.Cantidad, Clientes.Pais
+from Clientes inner join Pedidos on pedidos.IdCliente = Clientes.IdCliente
+inner join Detallespedidos on Detallespedidos.IdPedido = Pedidos.IdPedido
+where Pedidos.FechaPedido >='1996/07/01' and Pedidos.FechaPedido <='1996/07/31';
 
 -- 10) Obtener, del pedido 10304, su id, el nombre del cliente,el nombre y apellidos del empleado, la fecha del pedido y el importe total de dicho pedido 
 	
@@ -102,6 +107,20 @@ inner join Categorias on Categorias.IdCategoria = Productos.IdCategoria
  from  pedidos inner join detallespedidos on Detallespedidos.IdPedido = pedidos.IdPedido
  inner join Clientes on clientes.IdCliente = Pedidos.IdCliente
  where clientes.Pais = 'España';
+ 
+ 
+ -- 11) Obtener el nombre del cliente que mas ha facturado y el total de su facturacion
+ 
+ select clientes.NombreCompañia, format(sum(detallespedidos.cantidad * detallespedidos.PrecioUnidad),2) as 'Total'
+ from clientes join pedidos on clientes.idCliente=pedidos.idCliente
+ join detallespedidos on pedidos.IdPedido=detallespedidos.idPedido
+ group by clientes.NombreCompañia;
+ 
+ -- 12)Obtener el nombre de sus empleados y el de su jefe
+ 
+ select  empleados.Nombre as 'Empleados', emp.Nombre as 'Jefe'
+ from empleados left join empleados emp on empleados.jefe= emp.IdEmpleado;
+
 
 
 
