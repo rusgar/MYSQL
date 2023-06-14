@@ -1,3 +1,5 @@
+set global log_bin_trust_function_creators = 1;
+
 -- Creo la función CALCULAR_EDAD 
 DELIMITER //
 DROP FUNCTION IF EXISTS CALCULAR_EDAD//
@@ -89,3 +91,23 @@ BEGIN
 END
 $$
 delimiter ;
+
+--- ALTERNATIVA: TRIGGER 
+
+Delimiter $$
+DROP TRIGGER IF EXISTS actualizar_edad$$ -- Borramos el TRIGGER por si existiera
+CREATE TRIGGER actualizar_edad			 -- Creamos el TRIGGER
+	BEFORE INSERT ON alumnos			 -- y le decimos que lo lance antes de hacer el INSERT
+									     -- en la tabla ALUMNOS
+		FOR EACH ROW					 -- para cada registro (fila)
+			BEGIN
+#PRINICPIO
+				SET NEW.edad/*En los TRIGGERS, usamos NEW.campo para
+							  referirnos al valor nuevo del campo*/ 
+                              = TIMESTAMPDIFF(YEAR, NEW.fecha_nacimiento, CURDATE());
+                              /*La función TIMESTAMPDIFF calcula la diferencia, en este caso
+                              en formato YEAR (años) entre ALUMNOS.FECHA_NACIMIENTO y la fecha
+                              actual (CURDATE se refiere a Current Date*/
+#FIN
+			END	
+$$
