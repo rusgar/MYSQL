@@ -84,7 +84,7 @@ select productos.nombreproducto as 'Nombre', categorias.nombrecategoria as 'Cate
 from productos join categorias on  productos.idCategoria=categorias.IdCategoria
 where categorias.nombrecategoria = 'bebidas';
 
--- 11) Mostrar los id de los pedidos junto con su nombre que tienen productos de las categorías Lacteos o Bebibas.
+-- 11 Mostrar los id de los pedidos junto con su nombre que tienen productos de las categorías Lacteos o Bebibas.
 
 select Pedidos.IdPedido, productos.nombreProducto as 'Nombre', Categorias.NombreCategoria as 'Categoria'
 from Pedidos inner join Detallespedidos on Detallespedidos.IdPedido =Pedidos.IdPedido
@@ -92,6 +92,31 @@ inner join Productos on Detallespedidos.IdProducto=Productos.IdProducto
 inner join Categorias on Categorias.IdCategoria = Productos.IdCategoria
  where  Categorias.NombreCategoria = 'Lácteos' or categorias.NombreCategoria= 'Bebidas';
  
+ -- 12. Una lista de los pedidos que fueron entregados la primera quincena de mayo de 1998 y costaban más de 200€
+ 
+ select *
+ from pedidos 
+ where   pedidos.fechaEntrega between "1998-05-01" and "1998-05-15"  and  pedidos.cargo >200; 
+        
+
+
+-- 13. Una lista de los clientes que han hecho algún pedido el 4 de mayo de 1998
+select clientes.NombreContacto as 'Clientes'
+from clientes inner join pedidos on clientes.idcliente=pedidos.IdCliente
+where pedidos.fechapedido = "1998-05-04";
+
+
+
+
+-- 14.- Obtener los nombres de los empleados que han vendido productos de la categoría lácteos el día 4 de marzo de 1998
+ 
+ 
+ select  distinct concat(empleados.nombre, '--',empleados.apellidos) as 'Nombre Completo'
+from empleados inner join Pedidos on empleados.IdEmpleado = pedidos.IdEmpleado
+inner join detallespedidos on Pedidos.IdPedido =detallespedidos.IdPedido
+inner join productos on productos.IdProducto= detallespedidos.IdProducto
+inner join categorias on categorias.IdCategoria= productos.IdCategoria
+where categorias.NombreCategoria = 'Lacteos' and pedidos.FechaPedido= '1998-03-04';
 
 
  
