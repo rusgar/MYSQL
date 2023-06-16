@@ -116,7 +116,139 @@ from empleados inner join Pedidos on empleados.IdEmpleado = pedidos.IdEmpleado
 inner join detallespedidos on Pedidos.IdPedido =detallespedidos.IdPedido
 inner join productos on productos.IdProducto= detallespedidos.IdProducto
 inner join categorias on categorias.IdCategoria= productos.IdCategoria
-where categorias.NombreCategoria = 'Lacteos' and pedidos.FechaPedido= '1998-03-04';
+where categorias.NombreCategoria = 'Lácteos' and pedidos.FechaPedido= '1998-03-04';
+
+-- 15 Detañlles de pedido de los produrctos vendidop por el empleado nº1 el cliente 'greal'
+
+select Pedidos.IdPedido ,NombreProducto, Clientes.IdCliente, Clientes.NombreContacto as ' Empleado', detallespedidos.*
+from Pedidos inner join Clientes on Clientes.IdCliente = Pedidos.IdCliente
+inner join detallespedidos on  detallespedidos.IdPedido= pedidos.IdPedido
+inner join productos on productos.IdProducto= detallespedidos.IdProducto
+inner join empleados on empleados.IdEmpleado= pedidos.IdEmpleado
+where Clientes.IdCliente = 'GREAL' and empleados.Idempleado = 1 ;
+
+-- 16 Obtener todos los detalles del pedido cuyo cliente sea el Id cliente 'Furib', con el ID proveedor '23, con el ID empleado '1'
+
+select cli.IdCliente,cli.NombreContacto, prov.IdProveedor, prov.NombreCompañia,emp.Idempleado, emp.cargo
+from detallespedidos det
+inner join productos prod on det.IdProducto= prod.IdProducto
+inner join proveedores prov on prov.IdProveedor= prod.IdProveedor
+inner join categorias cat on cat.IdCategoria= prod.IdCategoria
+inner join pedidos  ped on ped.IdPedido= det.IdPedido
+inner join empleados  emp on emp.IdEmpleado= ped.IdEmpleado
+inner join clientes  cli on cli.IdCliente= ped.IdCliente
+where cli.IdCliente= 'FURIB' and prov.IdProveedor=23 and emp.Idempleado= 1 ;
+
+-- 17  Mostrar todos los campos de la tabla CATEGORÍAS
+SELECT *
+FROM neptuno.categorias;
+
+-- 18 Mostrar todos los países distintos de la tabla de CLIENTES
+select distinct Pais
+from clientes;
+
+-- 19 Mostrar el nombreProducto y precioUnidad de todos los PRODUCTOS cuyo precioUnidad sea superior a 100
+select  NombreProducto, concat(format(preciounidad,2), ' €') as 'precio'
+from productos
+where PrecioUnidad > 100;
+
+-- 20 Mostrar el nombreProducto, precioUnidad y unidades EnExistencia de todos los PRODUCTOS con precioUnidad comprendido entre 75 y 100
+select NombreProducto, PrecioUnidad, UnidadesEnExistencia
+from productos
+where PrecioUnidad  between  75 and 100 ;
+
+-- 21 Mostrar el nombre, apellidos y fechaContratacion  de todos los EMPLEADOS contratados (FechaContratacion) antes del 01-02-1993
+select Nombre, Apellidos, FechaContratacion
+from empleados
+where FechaContratacion < '1993-02-01';
+
+-- 22 Mostrar destinatario, fechaPedido y cargo de todos los PEDIDOS del segundo trimestre del año 1997
+select  Destinatario, FechaPedido, Cargo
+from pedidos
+where FechaPedido between '1997-04-01' and '1997-06-30';
+
+-- 23 Mostrar todos los CLIENTES cuyo nombreCompañia comience por ‘A’
+select *
+from clientes
+where NombreCompañia like 'a%';
+
+-- 25Mostrar todos los CLIENTES cuyo nombreCompañia tenga una ‘A’ en  el segundo carácter
+select *
+from clientes
+where NombreCompañia like '_a%';
+
+-- 26Mostrar todos los CLIENTES cuyo nombreCompañia finalice con el texto “store”
+select *
+from clientes
+where NombreCompañia like '%store';
+
+-- 27Mostrar todos los CLIENTES cuyo nombreCompañia  NO comience por ‘A’
+
+select *
+from clientes
+where NombreCompañia  not like 'a%';
+
+-- 28 Mostrar todos los PRODUCTOS cuyo nombreProducto contenga el texto “chocolate” en cualquier parte del nombreProducto
+select *
+from productos
+where NombreProducto like '%Chocolate%';
+
+-- 29 Mostrar nombreproducto y preciounidad de todos los PRODUCTOS que se encuentren suspendidos. El valor del campo suspendido tiene que ser distinto de 0 (0 = FALSE).
+select NombreProducto, PrecioUnidad, Suspendido
+from productos
+where Suspendido  <> 0;
+
+-- 30 Mostrar nombrecompañia, ciudad, pais, fax de los CLIENTES de los cuales no tengamos su número de fax (el valor del campo fax sea nulo).
+select  NombreCompañia, Ciudad,Pais, fax
+from clientes
+where fax is null;
+
+-- 31 Mostrar los nombreCompañia, ciudad, region y pais de todos los PROVEEdORES de los que conozcamos su región. 
+select NombreCompañia, Ciudad,Region,Pais
+from proveedores
+where region is not null;
+
+-- 32 Mostrar los nombreCompañia, ciudad, region y pais de todos los PROVEEDORES de Oviedo, Madrid o Berlín. 
+select * , NombreCompañia,Ciudad,Region,Pais
+from proveedores
+where ciudad in('Oviedo', 'Madrid','Berlin') ;
+
+-- 33 Mostrar los nombreCompañia, ciudad y codpostal de todos los CLIENTES cuyo código postal tenga una longitud de 5 caracteres.
+select * , NombreCompañia,Ciudad,codpostal
+from clientes
+where length(CodPostal)= 5;
+
+-- 34 Mostrar de la tabla de EMPLEADOS, el nombre, apellidos y cargo con el siguiente formato:   Nombre Apellidos (Cargo)
+select concat_ws('',Nombre, '--', Apellidos, '--', Cargo) as 'Nombre Apellidos (Cargo)'
+from empleados;
+
+
+-- 35 Mostrar los nombreproducto, preciounidad y el nombreproducto reemplazando el texto ‘Queso’ por ‘CHEESE’ de todos los PRODUCTOS que contengan el texto ‘queso’
+--    en cualquier parte del nombre.
+
+select Replace(Replace(NombreProducto,'Queso','Cheese'), 'queso', 'cheese') as  Nombre , concat(format(PrecioUnidad, 2), ' €') as 'Precio' 
+from productos
+ where NombreProducto like '%queso%' ;
+ 
+-- 36 Mostrar los precioUnidad de todos los PRODUCTOS aplicándoles todas las funciones de redondeo
+   -- (ROUND, FLOOR, CEIL). Mostrar únicamente los productos que tienen idCategoria con valor 1.
+   select  round(PrecioUnidad), floor(PrecioUnidad), Ceil(PrecioUnidad), IDcategoria
+   from Productos
+   where idcategoria = 1;
+   
+ -- 37 Mostrar de la tabla de  PEDIDOS: idcliente, idpedido, fechapedido, fechaenvio, fechaentrega, número de días transcurridos desde que se 
+ -- envió el pedido hasta que lo recibió el cliente y cargo del pedido
+-- de todos los pedidos cuyo idCliente sea ‘WELLI’.  	
+
+
+
+
+
+
+
+
+
+
 
 
  
