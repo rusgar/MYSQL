@@ -46,6 +46,8 @@
     revoke select  ( ANOTACIONES) on jardineria.subordinados from 'capataz' @'localhost';
       flush privileges;
       
+	show grants for 'capataz' @'localhost' ;-- Nuestra los privilegios
+      
 insert into subordinados (id, nombre, funciones , anotaciones, dni) values (1, 'Cherin', 'Engineering', 'hola', '859172476');
 insert into subordinados (id, nombre, funciones , anotaciones, dni) values (2, 'Collie', 'Services', 'adios', '487104887');
 insert into subordinados (id, nombre, funciones , anotaciones, dni) values (3, 'Hartley', 'Research and Development', 'tal vez', '867213585');
