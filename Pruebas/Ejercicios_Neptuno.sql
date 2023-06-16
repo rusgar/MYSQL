@@ -109,12 +109,13 @@ inner join Categorias on Categorias.IdCategoria = Productos.IdCategoria
  where clientes.Pais = 'España';
  
  
- -- 11) Obtener el nombre del cliente que mas ha facturado y el total de su facturacion
+ -- 11) Obtener el nombre de los tres clientes que mas ha facturado y el total de su facturacion
  
- select clientes.NombreCompañia, format(sum(detallespedidos.cantidad * detallespedidos.PrecioUnidad),2) as 'Total'
+ select  clientes.NombreCompañia, round(sum(detallespedidos.cantidad * detallespedidos.PrecioUnidad),2) as 'Total'
  from clientes join pedidos on clientes.idCliente=pedidos.idCliente
  join detallespedidos on pedidos.IdPedido=detallespedidos.idPedido
- group by clientes.NombreCompañia;
+ group by clientes.NombreCompañia
+ order by round(sum(detallespedidos.cantidad * detallespedidos.PrecioUnidad),2) desc limit 3;
  
  -- 12)Obtener el nombre de sus empleados y el de su jefe
  
