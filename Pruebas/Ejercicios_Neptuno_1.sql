@@ -238,7 +238,100 @@ from productos
    
  -- 37 Mostrar de la tabla de  PEDIDOS: idcliente, idpedido, fechapedido, fechaenvio, fechaentrega, número de días transcurridos desde que se 
  -- envió el pedido hasta que lo recibió el cliente y cargo del pedido
--- de todos los pedidos cuyo idCliente sea ‘WELLI’.  	
+-- de todos los pedidos cuyo idCliente sea ‘WELLI’, saberr tambien su nombre.  	
+ select ped.IdPedido, ped.IdCliente, ped.IdEmpleado,cli.NombreContacto, ped.FechaPedido, ped.FechaEntrega, ped.FechaEnvio , datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos'
+ from pedidos ped  INNER JOIN clientes cli on ped.IdCliente=cli.IdCliente
+ where ped.idcliente = 'WELLI';
+
+-- 38¿Cuántos CLIENTES tenemos?
+ select  count(*) as clientes
+from clientes;
+
+
+-- 38 Mostrar el número de países diferentes que hay en la tabla de CLIENTES.
+select count(distinct Pais) as ' Total  de Paises Diferentes'
+from clientes;
+
+
+#Mostrar  el cargo medio de los PEDIDOS realizados en el año 1996.
+select concat(format(avg(Cargo),2), ' €') as 'Cargo Medio',  year(FechaPedido) as Año
+from pedidos
+where year(FechaPedido) = '1996' group by year(FechaPedido) ;
+
+
+
+#Calcular los precioUnidad: mínimo, máximo y medio de todos los productos.
+ Select NombreProducto, PrecioUnidad, max(PrecioUnidad) as 'Maximo', min(PrecioUnidad) as 'Minimo', avg(PrecioUnidad) as 'Media'
+from productos
+group by PrecioUnidad, NombreProducto;
+
+#Calcular la suma de los cargos de todos los pedidos con fechaPedido
+# del año 1996.
+select  concat(format(sum(cargo),2), ' €') as 'Suma Total',  year(FechaPedido) as año
+from pedidos
+where year(FechaPedido) = '1996' group by year(FechaPedido) ;
+
+
+
+
+#Queremos hacer un descuento del 25% en todos nuestros PRODUCTOS. 
+#Mostrar el nombreproducto, el precioUnidad sin y con descuento.
+
+select nombreProducto, concat(format((PrecioUnidad),2), ' €') as 'Precio sin Descuento', concat(format((PrecioUnidad -(PrecioUnidad * 0.25) ),2 ),' €') as 'Precio con Descuento'
+from productos;
+
+
+
+
+#Queremos ver en una consulta sobre la tabla de PEDIDOS:
+ #el idpedido, idcliente, idempleado, fechapedido, fechaentrega, 
+ #número de días* transcurridos desde el pedido hasta la entrega del 
+ #mismo al cliente, cargo del pedido, comisión del vendedor* (15%) 
+ #y beneficio neto* (cargo-comisión= 85%). 
+ #Solamente se contemplarán los pedidos con FechaPedido 
+ #a partir del 1 de enero de 1997 y que se haya tardado menos de 
+ #30 días en entregar. 
+ 
+ select *, IdPedido, IdCliente,IdEmpleado,FechaPedido
+ from pedidos;
+
+
+#Se desea ver el nombreProducto, precioUnidad y 
+#unidadesEnExistencia de todos los PRODUCTOS 
+#ordenados descendentemente por el precioUnidad.
+
+
+#Se desea ver el nombreCompañia, Ciudad y Pais de todos los
+ #CLIENTES ordenados ascendentemente primero por el Pais, 
+ #después por la Ciudad y por último por el nombreCompañia.
+SELECT nombrecompañia, ciudad, pais
+FROM clientes
+ORDER BY pais, ciudad, nombrecompañia;
+
+#Se desea ver el nombreProducto, precioUnidad y unidadesEnExistencia 
+#de los 8 PRODUCTOS más caros. 
+
+
+#Se desea ver el nombreProducto, precioUnidad y
+# unidadesEnExistencia de los 6 productos siguientes al 4º producto más caro. 
+#seleccionar todos los paises de los cliente agrupado por pais
+
+#Calcular el número de CLIENTES que tenemos en cada país.
+
+# mostrar el número de clientes de los paisis que empiezan por A
+
+
+#Mostrar el número de PEDIDOS realizados cada año.
+# Recordad que existe una función llamada YEAR(fecha) 
+#que devuelve el año de una fecha. Agrupar utilizando esta función
+
+#Mostrar cuánto hemos vendido (Cargo de PEDIDOS)
+# agrupando los resultados por año y 
+#por PaisDestinatario de los pedidos.
+ #Ver los datos de todos los empleados cuya
+ #fecha de contratación sea anterior a la 
+ #fecha del primer pedido que ha recibido la empresa
+
 
 
 
