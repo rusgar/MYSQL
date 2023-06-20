@@ -292,8 +292,11 @@ from productos;
  #a partir del 1 de enero de 1997 y que se haya tardado menos de 
  #30 días en entregar. 
  
- select *, IdPedido, IdCliente,IdEmpleado,FechaPedido
- from pedidos;
+ select  distinct ped.IdPedido, ped.IdCliente,ped.IdEmpleado,year(ped.FechaPedido) as 'pedidos',datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
+ concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', concat(format((det.descuento+(ped.cargo * 0.15) ),2 ),' €') as 'Comision del vendedor',
+ concat(format((det.descuento+(ped.cargo * 0.85) ),2 ),' €') as 'Beneficio'
+ from pedidos  ped inner join detallespedidos det on det.IdPedido=ped.IdPedido
+ where year(ped.FechaPedido) like '%1997%'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30  ;
 
 
 #Se desea ver el nombreProducto, precioUnidad y 
