@@ -296,44 +296,96 @@ from productos;
  concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', concat(format((det.descuento+(ped.cargo * 0.15) ),2 ),' €') as 'Comision del vendedor',
  concat(format((det.descuento+(ped.cargo * 0.85) ),2 ),' €') as 'Beneficio'
  from pedidos  ped inner join detallespedidos det on det.IdPedido=ped.IdPedido
- where year(ped.FechaPedido) like '%1997%'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30  ;
+ where year(ped.FechaPedido) like '%1997%'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
 
 
 #Se desea ver el nombreProducto, precioUnidad y 
 #unidadesEnExistencia de todos los PRODUCTOS 
 #ordenados descendentemente por el precioUnidad.
+select  NombreProducto,PrecioUnidad, UnidadesEnExistencia
+from productos
+ order by PrecioUnidad desc;
+
 
 
 #Se desea ver el nombreCompañia, Ciudad y Pais de todos los
  #CLIENTES ordenados ascendentemente primero por el Pais, 
  #después por la Ciudad y por último por el nombreCompañia.
-SELECT nombrecompañia, ciudad, pais
-FROM clientes
-ORDER BY pais, ciudad, nombrecompañia;
+ 
+select nombrecompañia, ciudad, pais
+from clientes
+order by pais, ciudad, nombrecompañia;
 
 #Se desea ver el nombreProducto, precioUnidad y unidadesEnExistencia 
 #de los 8 PRODUCTOS más caros. 
-
+ select nombreProducto, precioUnidad, UnidadesEnExistencia
+ from productos
+order by PrecioUnidad  desc limit 8;
 
 #Se desea ver el nombreProducto, precioUnidad y
 # unidadesEnExistencia de los 6 productos siguientes al 4º producto más caro. 
+ select nombreProducto, precioUnidad, UnidadesEnExistencia
+ from productos
+order by PrecioUnidad  desc limit 4,6;
+
 #seleccionar todos los paises de los cliente agrupado por pais
+select  distinct pais
+from clientes;
 
 #Calcular el número de CLIENTES que tenemos en cada país.
+select count(IdCliente) as 'clientes',   pais
+from clientes
+group by Pais  order by Pais asc;
 
 # mostrar el número de clientes de los paisis que empiezan por A
 
+select count(IdCliente) as 'clientes',   pais
+from clientes
+where Pais like 'A%'
+group by Pais ;
 
 #Mostrar el número de PEDIDOS realizados cada año.
 # Recordad que existe una función llamada YEAR(fecha) 
 #que devuelve el año de una fecha. Agrupar utilizando esta función
 
+select count(idpedido) as ' Numero de pedidos' ,year( fechapedido) as 'año'
+from pedidos
+group by año;
+
 #Mostrar cuánto hemos vendido (Cargo de PEDIDOS)
 # agrupando los resultados por año y 
 #por PaisDestinatario de los pedidos.
+ select  PaisDestinatario,year(FechaPedido) as 'año', lpad(concat(format(sum(cargo),2), ' €'),10, '__')as 'pedidos'
+ from pedidos
+ group by year(FechaPedido), PaisDestinatario order by PaisDestinatario, year(FechaPedido) ;
+
+
  #Ver los datos de todos los empleados cuya
  #fecha de contratación sea anterior a la 
  #fecha del primer pedido que ha recibido la empresa
+ 
+select  empleados.Nombre, empleados.FechaContratacion
+from empleados 
+inner join pedidos on empleados.IdEmpleado=pedidos.IdEmpleado
+group by pedidos.IdEmpleado
+having   empleados.FechaContratacion < min(pedidos.FechaPedido);
+ 
+ 
+ SELECT *
+FROM Empleados
+WHERE FechaContratacion < (
+SELECT MIN(FechaPedido)
+FROM Pedidos
+);
+
+SELECT Emp.Nombre, Emp.FechaContratacion, Ped.PrimeraFechaPedido
+FROM Empleados  Emp
+INNER JOIN ( SELECT MIN(FechaPedido) AS PrimeraFechaPedido
+			FROM Pedidos) AS Ped
+            ON Emp.FechaContratacion < Ped.PrimeraFechaPedido
+            order by Emp.FechaContratacion ;
+ 
+
 
 
 
