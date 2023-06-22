@@ -293,10 +293,10 @@ from productos;
  #30 días en entregar. 
  
  select  distinct ped.IdPedido, ped.IdCliente,ped.IdEmpleado,year(ped.FechaPedido) as 'pedidos',datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
- concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', concat(format((det.descuento+(ped.cargo * 0.15) ),2 ),' €') as 'Comision del vendedor',
- concat(format((det.descuento+(ped.cargo * 0.85) ),2 ),' €') as 'Beneficio'
- from pedidos  ped inner join detallespedidos det on det.IdPedido=ped.IdPedido
- where year(ped.FechaPedido) like '%1997%'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
+ concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', concat(format((ped.cargo * 0.15) ,2 ),' €') as 'Comision del vendedor',
+ concat(format((ped.cargo * 0.85) ,2 ),' €') as 'Beneficio'
+ from pedidos ped
+  where year(ped.FechaPedido) >= '1997'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
 
 
 #Se desea ver el nombreProducto, precioUnidad y 
@@ -364,25 +364,31 @@ group by año;
  #fecha de contratación sea anterior a la 
  #fecha del primer pedido que ha recibido la empresa
  
-select  empleados.Nombre, empleados.FechaContratacion
+select  empleados.Nombre, empleados.FechaContratacion, pedidos.FechaPedido
 from empleados 
 inner join pedidos on empleados.IdEmpleado=pedidos.IdEmpleado
-group by pedidos.IdEmpleado
+group by pedidos.IdEmpleado, pedidos.FechaPedido
 having   empleados.FechaContratacion < min(pedidos.FechaPedido);
  
  
- SELECT *
+ SELECT Empleados.FechaContratacion, pedidos.FechaPedido
 FROM Empleados
 WHERE FechaContratacion < (
-SELECT MIN(FechaPedido)
+SELECT FechaPedido
 FROM Pedidos
+order by FechaPedido limit 1
 );
 
+
+ #Ver los datos de todos los empleados cuya
+ #fecha de contratación  copn antiguedad de 3 años sea anterior a la 
+ #fecha del primer pedido que ha recibido la empresa
+ 
 SELECT Emp.Nombre, Emp.FechaContratacion, Ped.PrimeraFechaPedido
 FROM Empleados  Emp
 INNER JOIN ( SELECT MIN(FechaPedido) AS PrimeraFechaPedido
 			FROM Pedidos) AS Ped
-            ON Emp.FechaContratacion < Ped.PrimeraFechaPedido
+            ON  adddate(Emp.FechaContratacion, 365*3) < (Ped.PrimeraFechaPedido)
             order by Emp.FechaContratacion ;
  
 
