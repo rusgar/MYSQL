@@ -45,6 +45,12 @@
     grant select (ANOTACIONES, ID, NOMBRE, FUNCIONES, DNI) on jardineria.subordinados to'capataz' @'localhost';
     revoke select  ( ANOTACIONES) on jardineria.subordinados from 'capataz' @'localhost';
       flush privileges;
+     
+     
+ drop user  'jardinero' @'localhost';
+ create user 'jardinero' @'localhost' IDENTIFIED By '147';
+ grant execute on procedure neptuno.obtener_comisiones_var_fecha_case to 'jardinero' @'localhost';
+ flush privileges;
       
 	show grants for 'capataz' @'localhost' ;-- Nuestra los privilegios
       
