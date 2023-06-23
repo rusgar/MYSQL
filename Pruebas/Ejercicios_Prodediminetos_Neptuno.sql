@@ -13,6 +13,10 @@
  -- from pedidos  ped inner join detallespedidos det on det.IdPedido=ped.IdPedido
  -- where year(ped.FechaPedido) like '%1997%'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
  
+ 
+ -- ver los usuarios creados
+ select user, host from mysql.user;
+ 
  delimiter //
  drop procedure if exists obtener_comisiones//
 	create procedure obtener_comisiones()
@@ -141,3 +145,32 @@
     //
     
     call CLIENTES_PEDIDO_FECHA('19970501', '19980105');
+    
+    
+   -- creamos solo un permiso para el repartidor  
+  drop user if exists  'repartidor' @'localhost';
+ create user 'repartidor' @'localhost' IDENTIFIED By 'xxx';
+ grant execute on procedure neptuno.CLIENTES_PEDIDO_FECHA to 'repartidor' @'localhost';
+ flush privileges;
+ 
+ 
+ 	DELIMITER //
+    DROP PROCEDURE IF EXISTS CLIENTES_PEDIDO_FECHA_1//
+    CREATE PROCEDURE CLIENTES_PEDIDO_FECHA_1( IN FECHA_INICIAL DATE,
+                                               FECHA_FINAL DATE  )
+    begin
+    IF FECHA_FINAL >= FECHA_INICIAL THEN
+    SELECT * 
+    FROM clientes
+    INNER JOIN PEDIDOS ON CLIENTES.IDCLIENTE= pedidos.IdCliente
+    WHERE PEDIDOS.FECHAPEDIDO BETWEEN FECHA_INICIAL AND FECHA_FINAL ;
+    ELSEIF FECHA_FINAL < FECHA_INICIAL then
+    select 'LA FICHA FINAL ES ANTERIOR A LA FECHA INICIAL' AS 'ERROR';
+    END IF;
+         
+    
+    end
+    
+    //
+    
+    call CLIENTES_PEDIDO_FECHA_1('19970102', '19970101');
