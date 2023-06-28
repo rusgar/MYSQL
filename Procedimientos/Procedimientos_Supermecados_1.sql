@@ -70,20 +70,20 @@ CREATE PROCEDURE CAJA(IN P_ID_PRODUCTO INT,
         $$
  
  
- -- Creamos los privilegios de otra tabla para mis empleados
+ -- ------------------Creamos los privilegios de otra tabla para mis empleados--------------------------------------------------
  
  grant execute on procedure SUPERMERCADO_1.caja to 'empleado1'@'localhost';
  grant execute on procedure SUPERMERCADO_1.caja to 'empleado2'@'localhost';
   
   flush privileges;
   
--- Modificamos la tabla venta, para saber la hora de la venta, con la funbcion Timestamp	
+-- ----------------Modificamos la tabla venta, para saber la hora de la venta, con la funbcion Timestamp------------------------	
  SELECT * FROM supermercado_1.venta;
 alter table venta add FECHAHORA TIMESTAMP;
 SELECT current_timestamp()
                    INTO @FECHAHORA;
 				   SELECT @FECHAHORA;      
-    
+-- ------------- Añadimos dos campos mas de Unidades como la moneda------------------------------------------------------------    
 SELECT * FROM supermercado_1.producto;
 alter table producto  add UD_VENTA char(10);
 
