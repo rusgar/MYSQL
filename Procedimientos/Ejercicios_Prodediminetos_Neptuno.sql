@@ -21,11 +21,18 @@
  drop procedure if exists obtener_comisiones//
 	create procedure obtener_comisiones()
     begin
-		 select  distinct ped.IdPedido, ped.IdCliente,ped.IdEmpleado,year(ped.FechaPedido) as 'pedidos',datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
- concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', concat(format((det.descuento+(ped.cargo * 0.15) ),2 ),' €') as 'Comision del vendedor',
- concat(format((det.descuento+(ped.cargo * 0.85) ),2 ),' €') as 'Beneficio'
- from pedidos  ped inner join detallespedidos det on det.IdPedido=ped.IdPedido
-  where year(ped.FechaPedido) >= '1997'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
+		 select  distinct ped.IdPedido,
+                      ped.IdCliente,
+                      ped.IdEmpleado,
+                      year(ped.FechaPedido) as 'pedidos',
+                      datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
+                      concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', concat(format((det.descuento+(ped.cargo * 0.15) ),2 ),' €') as 'Comision del vendedor',
+                      concat(format((det.descuento+(ped.cargo * 0.85) ),2 ),' €') as 'Beneficio'
+      from pedidos  ped 
+         inner join detallespedidos det 
+         on det.IdPedido=ped.IdPedido
+      where year(ped.FechaPedido) >= '1997' 
+            and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
   end
  
  
@@ -33,16 +40,20 @@
  //
  
   delimiter //
- drop procedure if exists obtener_comisiones_var//
+  drop procedure if exists obtener_comisiones_var//
 	create procedure obtener_comisiones_var(In Comision Int)
     begin
     set @com= Comision/100;
     set @ben = 1- @com ;
-	 select  distinct ped.IdPedido, ped.IdCliente,ped.IdEmpleado,year(ped.FechaPedido) as 'pedidos',datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
- concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', 'Comision Vendedor' as Com_Ven, concat(format((ped.cargo *@com) ,2 ),' €') as 'Comision del vendedor',
- concat(format((ped.cargo * @ben) ,2 ),' €') as 'Beneficio'
- from pedidos ped
-  where year(ped.FechaPedido) >= '1997'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
+	  select  distinct ped.IdPedido, 
+                     ped.IdCliente,
+                     ped.IdEmpleado,year(ped.FechaPedido) as 'pedidos',
+                     datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
+                     concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', 'Comision Vendedor' as Com_Ven, concat(format((ped.cargo *@com) ,2 ),' €') as 'Comision del vendedor',
+                     concat(format((ped.cargo * @ben) ,2 ),' €') as 'Beneficio'
+    from pedidos ped
+    where year(ped.FechaPedido) >= '1997'  
+    and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
   end
  
  
@@ -60,15 +71,21 @@
     set @ben = 1- @com ;
     set @fecha_inicial= fecha_inicial  ;
     set @fecha_final= fecha_final ;
-	select   ped.IdPedido, ped.IdCliente,ped.IdEmpleado,'Fecha de pedido' ,  ped.fechaPedido, ped.FechaEntrega as 'pedidos',datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
- concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', 'Comision Vendedor' as Com_Ven, concat(format((ped.cargo *@com) ,2 ),' €') as 'Comision del vendedor',
- concat(format((ped.cargo * @ben) ,2 ),' €') as 'Beneficio'
- from pedidos ped
-  where ped.FechaPedido between @fecha_inicial and @fecha_final and datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
-  ELSEIF COMISION < 0 THEN
-  SELECT 'NO SE ADMINTE COMISIONES INFERIORES A 0' AS 'Comision Negativa';
-  ELSEIF COMISION > 100 THEN
-  SELECT 'NO SE ADMINTE COMISIONES SUPERIORES  A 100' AS 'Comision Excesiva al precio';
+	  select   ped.IdPedido,
+             ped.IdCliente,
+             ped.IdEmpleado,'Fecha de pedido' ,
+             ped.fechaPedido, ped.FechaEntrega as 'pedidos',
+             datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
+             concat(format(ped.cargo, 2) , ' €')as 'Cargo del Pedido', 'Comision Vendedor' as Com_Ven, concat(format((ped.cargo *@com) ,2 ),' €') as 'Comision del vendedor',
+             concat(format((ped.cargo * @ben) ,2 ),' €') as 'Beneficio'
+    from pedidos ped
+    where ped.FechaPedido 
+          between @fecha_inicial and @fecha_final 
+          and datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
+    ELSEIF COMISION < 0 THEN
+           SELECT 'NO SE ADMINTE COMISIONES INFERIORES A 0' AS 'Comision Negativa';
+    ELSEIF COMISION > 100 THEN
+           SELECT 'NO SE ADMINTE COMISIONES SUPERIORES  A 100' AS 'Comision Excesiva al precio';
   END IF;
   end
  
@@ -84,7 +101,7 @@
     
     
  delimiter //
- drop procedure if exists obtener_comisiones_var_fecha_case//
+  drop procedure if exists obtener_comisiones_var_fecha_case//
 	create procedure obtener_comisiones_var_fecha_case(In Comision float, 
                                                       fecha_inicial date  ,
                                                       fecha_final   date )
@@ -100,7 +117,9 @@
     set @ben = 1- @com ;
     set @fecha_inicial= fecha_inicial  ;
     set @fecha_final= fecha_final ;
-	select   ped.IdPedido, ped.IdCliente,ped.IdEmpleado,'Fecha de pedido' ,
+	  select   ped.IdPedido,
+             ped.IdCliente,
+             ped.IdEmpleado,'Fecha de pedido' ,
              ped.fechaPedido, 
              ped.FechaEntrega as 'pedidos',
              datediff( ped.FechaEntrega, ped.FechaPedido) as 'Dias Transcurridos', 
@@ -109,7 +128,8 @@
              concat(format((ped.cargo * @ben) ,2 ),' €') as 'Beneficio'
     from pedidos ped
     where ped.FechaPedido 
-    between @fecha_inicial and @fecha_final and datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
+    between @fecha_inicial 
+    and @fecha_final and datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
     end case;
     end
  
@@ -122,9 +142,9 @@
  -- otro permiso ( que no vea tablas , ni funciones)
  
   drop user  'jardinero' @'localhost';
- create user 'jardinero' @'localhost' IDENTIFIED By '147';
- grant execute on procedure neptuno.obtener_comisiones_var_fecha_case to 'jardinero' @'localhost';
- flush privileges;
+  create user 'jardinero' @'localhost' IDENTIFIED By '147';
+  grant execute on procedure neptuno.obtener_comisiones_var_fecha_case to 'jardinero' @'localhost';
+  flush privileges;
  
 -- Crear un procedimiento con  dos parametros de entrada (tipo dfecha) que devuelva los clientes que han realizado un pedido en el rango de fechas que hemos introducido el usuario
 --  y crear un usuario que puede solo crear ese procedimiento
@@ -149,9 +169,9 @@
     
    -- creamos solo un permiso para el repartidor  
   drop user if exists  'repartidor' @'localhost';
- create user 'repartidor' @'localhost' IDENTIFIED By 'xxx';
- grant execute on procedure neptuno.CLIENTES_PEDIDO_FECHA to 'repartidor' @'localhost';
- flush privileges;
+  create user 'repartidor' @'localhost' IDENTIFIED By 'xxx';
+  grant execute on procedure neptuno.CLIENTES_PEDIDO_FECHA to 'repartidor' @'localhost';
+  flush privileges;
  
  
  	DELIMITER //
