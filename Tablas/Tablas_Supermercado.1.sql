@@ -75,3 +75,18 @@ insert into tienda values(default, 'Online', 3);
   PRIMARY KEY (ID_ENVIO) ,
   FOREIGN KEY (ID_VENTA)  REFERENCES VENTA(ID_VENTA)
   );    
+  
+  -- Añadimos el campo ID_tienda para que los empleados tengan un centro de trabajo
+  
+  SELECT * FROM supermercado_1.empleado;
+alter table supermercado_1.empleado add  id_tienda int;
+alter table empleado add constraint foreign key(id_tienda) references tienda(id_tienda);
+
+-- Asignacion de los viejos empleados a la primera tienda, es decir, 1
+
+update empleado set id_tienda =1 where id_empleado between 1 and 3;
+
+-- Contratamos dos empleados para la segunda tienda en londres
+
+insert into empleado value(default, 'Willian','Wallace','cajero4','2');
+insert into empleado value(default, 'Rob','Roy','cajero5','2');
