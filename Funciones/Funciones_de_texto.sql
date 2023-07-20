@@ -12,4 +12,7 @@ BEGIN
 END
 //
 
+select test.saluda('EDU') as 'Saludo';
+
+
 
