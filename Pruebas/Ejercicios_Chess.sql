@@ -64,6 +64,8 @@ create table partidas
 	Insert into  partidas values (default, 3, 4, 'Madrid', 33,'5:03:47', 'n','20230724');
      Insert into  partidas values (default, 2, 3, 'Oviedo', 33,'5:03:47', 'B','20230723');
      Insert into  partidas values (default, 1, 4, 'Oviedo', 33,'5:03:47', 'B','20230719');
+     Insert into  partidas values (default, 1, 4, 'Aviles', 215,'08:15:35', 'T','20230710');
+
      
      
 
