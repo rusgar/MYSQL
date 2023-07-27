@@ -4,7 +4,7 @@ USE CHESS;
 
 -- Importamos la tabla del csv que hemos descargo de FIDE
 
-
+-- ------------------------------------------------------------------------------------------------------
   -- Alteramos la tabla y colocamos el id_jugador
    alter table jugadores add id_jugador int;  
    set global sql_safe_updates = 0;
@@ -18,8 +18,9 @@ USE CHESS;
   -- alteramos la tabla para colocar la primary key de id_jugadopr
      alter table jugadores
      add constraint primary key (id_jugador);
+  -- -------------------------------------------------------------------------------------------------------   
      
- -- Vemos que jugadores son de USa y de China y ordenados por fecha nacimeinto    
+ -- Vemos que jugadores son de USA y de China y ordenados por fecha nacimeinto    
 Select JUGADORES.*
 from jugadores
 where pais = 'USA' or pais = 'CHN'
@@ -29,13 +30,13 @@ Select *
 from jugadores
 where pais = 'USA' or pais = 'CHN'
 order by PAIS DESC, ELO DESC;
--------------------------------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------------------------------------
 
 SELECT COUNT(*), PAIS
  FROM JUGADORES
  where pais = 'USA' or pais = 'CHN'
 group by PAIS;
----------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------------
 -- Vamos a hacer una consulta que nos devuelva los jugadores que nacieron entre 1980 y 1990
 
 Select jugador, elo, byear
