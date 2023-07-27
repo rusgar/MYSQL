@@ -72,5 +72,3 @@ create table partidos
     update partidos
    set fecha = '20230813'
    where jornada = 1;
-   
-   
