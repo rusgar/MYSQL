@@ -98,3 +98,54 @@ CALL ACTUALIZAR_RESULTADO(19, 8, 4, 8);
 CALL ACTUALIZAR_RESULTADO(20, 9, 5, 9);
 CALL ACTUALIZAR_RESULTADO(11, 10, 6, 9);
     
+-- ------------------------------------------- METEMOS LA JORANADA 3 Y 4 -----------------------------------------------------------
+-- Jornada 3 
+    insert into partidos values(1, 13,null,null,default,3,20230827);
+    insert into partidos values(2, 14,null,null,default,3,20230827);
+    insert into partidos values(3, 15,null,null,default,3,20230827);
+    insert into partidos values(4, 16,null,null,default,3,20230827);
+    insert into partidos values(5, 17,null,null,default,3,20230827);
+    insert into partidos values(6, 18,null,null,default,3,20230827);
+    insert into partidos values(7, 19,null,null,default,3,20230827);
+    insert into partidos values(8, 20,null,null,default,3,20230827);
+    insert into partidos values(9, 11,null,null,default,3,20230827);
+    insert into partidos values(10,12,null,null,default,3,20230827);
+	
+		-- Jornada 4
+    insert into partidos values(14, 1,null,null,default,4,20230903);
+    insert into partidos values(15, 2,null,null,default,4,20230903);
+    insert into partidos values(16, 3,null,null,default,4,20230903);
+    insert into partidos values(17, 4,null,null,default,4,20230903);
+    insert into partidos values(18, 5,null,null,default,4,20230903);
+    insert into partidos values(19, 6,null,null,default,4,20230903);
+    insert into partidos values(20, 7,null,null,default,4,20230903);
+    insert into partidos values(11, 8,null,null,default,4,20230903);
+    insert into partidos values(12, 9,null,null,default,4,20230903);
+    insert into partidos values(13,10,null,null,default,4,20230903);
+    
+    
+-- -----------------------------------------------------Aquí actualizo los resultados de las dos primeras jornadas--------------------------------------
+    
+        -- RESULTADOS JORANADA 3
+CALL ACTUALIZAR_RESULTADO(1, 13, 2, 3);
+CALL ACTUALIZAR_RESULTADO(2, 14, 2, 2);
+CALL ACTUALIZAR_RESULTADO(3, 15, 4, 2);
+CALL ACTUALIZAR_RESULTADO(4, 16, 1, 2);
+CALL ACTUALIZAR_RESULTADO(5, 17, 1, 0);
+CALL ACTUALIZAR_RESULTADO(6, 18, 2, 4);
+CALL ACTUALIZAR_RESULTADO(7, 19, 4, 4);
+CALL ACTUALIZAR_RESULTADO(8, 20, 1, 1);
+CALL ACTUALIZAR_RESULTADO(9, 11, 2, 0);
+CALL ACTUALIZAR_RESULTADO(10, 12,1, 4);
+
+-- RESULTADOS JORANADA 4
+CALL ACTUALIZAR_RESULTADO(14, 1, 2, 0);
+CALL ACTUALIZAR_RESULTADO(15, 2, 2, 0);
+CALL ACTUALIZAR_RESULTADO(16, 3, 2, 2);
+CALL ACTUALIZAR_RESULTADO(17, 4, 4, 2);
+CALL ACTUALIZAR_RESULTADO(18, 5, 2, 0);
+CALL ACTUALIZAR_RESULTADO(19, 6, 3, 1);
+CALL ACTUALIZAR_RESULTADO(20, 7, 2, 3);
+CALL ACTUALIZAR_RESULTADO(11, 8, 3, 1);
+CALL ACTUALIZAR_RESULTADO(12, 9, 1, 2);
+CALL ACTUALIZAR_RESULTADO(13,10, 0, 1);

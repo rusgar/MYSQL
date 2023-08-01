@@ -11,7 +11,7 @@ begin
 
 -- ------------------------------- COMPROBACION QUE NO SE HAYA DISPUTADO EL PARTIDO---------------------------------
     
-    CALL OBTENER_RESULTADO (P_ID_LOCAL,
+    CALL COMPROBAR_RESULTADO (P_ID_LOCAL,
                             P_ID_VISITANTE,
                             @RESULTADO );
     IF @RESULTADO IS NULL THEN 
@@ -27,103 +27,106 @@ begin
 -- ------------------- SEGUNDO PASO ACTUALIZAR EL CAMPO RESULTADO --------------------------------------------------------------------------------------------
       CASE 
           WHEN P_MARCADOR_LOCAL = P_MARCADOR_VISITANTE THEN
-          CALL INFORMAR_MARCADOR(P_ID_LOCAL,
+          CALL INFORMAR_RESULTADO(P_ID_LOCAL,
 						         P_ID_VISITANTE,
                                  'E');
                
                         
                 
           WHEN P_MARCADOR_LOCAL < P_MARCADOR_VISITANTE THEN
-               CALL INFORMAR_MARCADOR(P_ID_LOCAL,
+               CALL INFORMAR_RESULTADO(P_ID_LOCAL,
 						         P_ID_VISITANTE,
                                  'V');                      
                     
           
           WHEN P_MARCADOR_LOCAL > P_MARCADOR_VISITANTE THEN
-              CALL INFORMAR_MARCADOR(P_ID_LOCAL,
+              CALL INFORMAR_RESULTADO(P_ID_LOCAL,
 						         P_ID_VISITANTE,
                                  'L');                                       
                
                
           
       END CASE; 
-      -- -------------------------------- EMPATE---------------------------------
+      
+      
+      -- -------------------------------- EMPATE---------------------------------------------------------
       CASE 
       WHEN P_MARCADOR_LOCAL = P_MARCADOR_VISITANTE THEN
-      UPDATE EQUIPOS    
-             SET 
-                 P_GANADOS = P_GANADOS + 0,
-                 P_EMPATADOS = P_EMPATADOS + 1,
-                 P_PERDIDOS = P_PERDIDOS + 0,
-                 G_FAVOR = G_FAVOR + P_MARCADOR_LOCAL,
-                 G_CONTRA = G_CONTRA + P_MARCADOR_VISITANTE, 
-                 P_JUGADOS = P_JUGADOS + 1,
-                 PUNTOS = PUNTOS +1
-                 WHERE ID_EQUIPO = P_ID_LOCAL;
-        UPDATE EQUIPOS    
-             SET P_GANADOS = P_GANADOS + 0,
-                 P_EMPATADOS = P_EMPATADOS + 1,
-                 P_PERDIDOS = P_PERDIDOS + 0,
-                 G_FAVOR = G_FAVOR + P_MARCADOR_VISITANTE,
-                 G_CONTRA = G_CONTRA + P_MARCADOR_LOCAL, 
-                 P_JUGADOS = P_JUGADOS + 1,
-                 PUNTOS = PUNTOS +1 
-                 WHERE ID_EQUIPO = P_ID_VISITANTE;    
+      
+      CALL ACTUALIZAR_EQUIPOS(0,                    -- IN PE_GANADOS INT
+                              1,                    -- IN PE_EMPATADOS INT
+                              0,                   --  IN PE_PERDIDOS INT
+                              P_MARCADOR_LOCAL,    -- IN PE_FAVOR INT
+                              P_MARCADOR_VISITANTE, -- IN PE_CONTRA INT
+                              1,                    -- IN PE_JUGADOS INT
+                              1,                   -- IN PE_PUNTOS INT
+                              P_ID_LOCAL);       --  IN PE_ID_EQUIPO INT
+       
+        CALL ACTUALIZAR_EQUIPOS(0,                   -- IN PE_GANADOS INT
+                                1,                   -- IN PE_EMPATADOS INT
+                                0,                   --  IN PE_PERDIDOS INT
+                                P_MARCADOR_VISITANTE, -- IN PE_FAVOR INT
+                                P_MARCADOR_LOCAL,     -- IN PE_CONTRA INT
+                                1,                    -- IN PE_JUGADOS INT
+                                1,                    -- IN PE_PUNTOS INT
+                                P_ID_VISITANTE );    --  IN PE_ID_EQUIPO INT);
+          
                  
-                 -- -------------------------------- LOCAL--------------------------------
+    -- ------------------------------- LOCAL-------------------------------------------------------
        
       WHEN P_MARCADOR_LOCAL > P_MARCADOR_VISITANTE THEN
-      UPDATE EQUIPOS    
-             SET 
-                 P_GANADOS = P_GANADOS + 1,
-                 P_EMPATADOS = P_EMPATADOS + 0,
-                 P_PERDIDOS = P_PERDIDOS + 0,
-                 G_FAVOR = G_FAVOR + P_MARCADOR_LOCAL,
-                 G_CONTRA = G_CONTRA + P_MARCADOR_VISITANTE, 
-                 P_JUGADOS = P_JUGADOS + 1,
-                 PUNTOS = PUNTOS +3
-                 WHERE ID_EQUIPO = P_ID_LOCAL;
-        UPDATE EQUIPOS    
-             SET P_GANADOS = P_GANADOS + 0,
-                 P_EMPATADOS = P_EMPATADOS + 0,
-                 P_PERDIDOS = P_PERDIDOS + 1,               
-                 G_FAVOR = G_FAVOR + P_MARCADOR_VISITANTE,
-                 G_CONTRA = G_CONTRA + P_MARCADOR_LOCAL, 
-                 P_JUGADOS = P_JUGADOS + 1,
-                 PUNTOS = PUNTOS +0 
-                 WHERE ID_EQUIPO = P_ID_VISITANTE; 
+      
+      CALL ACTUALIZAR_EQUIPOS(1,                    -- IN PE_GANADOS INT
+                              0,                    -- IN PE_EMPATADOS INT
+                              0,                   --  IN PE_PERDIDOS INT
+                              P_MARCADOR_LOCAL,    -- IN PE_FAVOR INT
+                              P_MARCADOR_VISITANTE, -- IN PE_CONTRA INT
+                              1,                    -- IN PE_JUGADOS INT
+                              3,                   -- IN PE_PUNTOS INT
+                              P_ID_LOCAL);       --  IN PE_ID_EQUIPO INT
+                              
+        CALL ACTUALIZAR_EQUIPOS(0,                   -- IN PE_GANADOS INT
+                                0,                   -- IN PE_EMPATADOS INT
+                                1,                   --  IN PE_PERDIDOS INT
+                                P_MARCADOR_VISITANTE, -- IN PE_FAVOR INT
+                                P_MARCADOR_LOCAL,     -- IN PE_CONTRA INT
+                                1,                    -- IN PE_JUGADOS INT
+                                0,                    -- IN PE_PUNTOS INT
+                                P_ID_VISITANTE );    --  IN PE_ID_EQUIPO INT);
+      
+    
                  
-                 -- -------------------------------- VISITANTE---------------------------------
+   -- -------------------------------- VISITANTE------------------------------------------------------
       
       WHEN P_MARCADOR_LOCAL < P_MARCADOR_VISITANTE THEN
-      UPDATE EQUIPOS    
-             SET 
-                 P_GANADOS = P_GANADOS + 0,
-                 P_EMPATADOS = P_EMPATADOS + 0,
-                 P_PERDIDOS = P_PERDIDOS + 1,
-                 G_FAVOR = G_FAVOR + P_MARCADOR_LOCAL,
-                 G_CONTRA = G_CONTRA + P_MARCADOR_VISITANTE, 
-                 P_JUGADOS = P_JUGADOS + 1,
-                 PUNTOS = PUNTOS + 0
-                 WHERE ID_EQUIPO = P_ID_LOCAL;
-        UPDATE EQUIPOS    
-             SET P_GANADOS = P_GANADOS + 1,
-                 P_EMPATADOS = P_EMPATADOS + 0,
-                 P_PERDIDOS = P_PERDIDOS + 0,
-                 G_FAVOR = G_FAVOR + P_MARCADOR_VISITANTE,
-                 G_CONTRA = G_CONTRA + P_MARCADOR_LOCAL, 
-                 P_JUGADOS = P_JUGADOS + 1,
-                 PUNTOS = PUNTOS +3
-                 WHERE ID_EQUIPO = P_ID_VISITANTE; 
+      
+      CALL ACTUALIZAR_EQUIPOS(0,                    -- IN PE_GANADOS INT
+                              0,                    -- IN PE_EMPATADOS INT
+                              1,                   --  IN PE_PERDIDOS INT
+                              P_MARCADOR_LOCAL,    -- IN PE_FAVOR INT
+                              P_MARCADOR_VISITANTE, -- IN PE_CONTRA INT
+                              1,                    -- IN PE_JUGADOS INT
+                              0,                   -- IN PE_PUNTOS INT
+                              P_ID_LOCAL);       --  IN PE_ID_EQUIPO INT
+                              
+        CALL ACTUALIZAR_EQUIPOS(1,                   -- IN PE_GANADOS INT
+                                0,                   -- IN PE_EMPATADOS INT
+                                0,                   --  IN PE_PERDIDOS INT
+                                P_MARCADOR_VISITANTE, -- IN PE_FAVOR INT
+                                P_MARCADOR_LOCAL,     -- IN PE_CONTRA INT
+                                1,                    -- IN PE_JUGADOS INT
+                                3,                    -- IN PE_PUNTOS INT
+                                P_ID_VISITANTE );    --  IN PE_ID_EQUIPO INT);                     
+     
+      
                  
-         END CASE; 
+ END CASE; 
          
          
          ELSE
           SELECT
-                'NO SE PUEDE JUGAR ESTE PARIDO' AS 'YA SE HA JUGADO';
-         
- END IF;   
+                'NO SE PUEDE JUGAR ESTE PARIDO' AS 'YA SE HA JUGADO';         
+         END IF;   
       
 end
 //
