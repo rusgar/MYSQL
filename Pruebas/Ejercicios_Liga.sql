@@ -6,8 +6,10 @@
   update partidos
         set fecha = '20230813'
         where jornada = 1;
+  -- ------------------------------------------- Sacar un resultado para que te de entre 0 y 4 -------------------------------------     
+        select floor(rand()* (4));
         
-  -- 2 -----Conta quien jugo el ATl.Madrid la jornada 2
+  -- 2 -----Conta quien jugo el ATl.Madrid la jornada 2--------------------------------------------------------------------------------
   
 SELECT EQUIPOS.NOMBRE
 FROM EQUIPOS WHERE ID_EQUIPO IN( SELECT PARTIDOS.ID_LOCAL
@@ -105,7 +107,7 @@ WHERE G_FAVOR > 15;
  GROUP BY ID_LOCAL ,  ID_VISITANTE
  ORDER BY 'DIFERENCIA DE GOLES' DESC LIMIT 1;
   
-  -- SUBCONSULTA DE LA JORNADA 1 SIN EL INNER JOIN
+  -- 18  SUBCONSULTA DE LA JORNADA 1 SIN EL INNER JOIN
  SELECT NOMBRE
  FROM EQUIPOS
  WHERE ID_EQUIPO IN (SELECT ID_VISITANTE
@@ -117,6 +119,14 @@ WHERE G_FAVOR > 15;
  WHERE ID_EQUIPO IN (SELECT ID_LOCAL
                      FROM PARTIDOS
                      WHERE JORNADA =1);
+                     
+ -- 19 Sacar equipos segun sus pùestos , es decir, a partir del sexto  cuatro equipo
+ 
+ select *
+from equipos
+order by puntos desc limit 4 offset 5;
+
+SELECT * FROM liga.equipos ORDER BY PUESTO ASC;
  
  
  
