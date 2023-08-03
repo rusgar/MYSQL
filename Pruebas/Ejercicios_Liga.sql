@@ -127,6 +127,23 @@ from equipos
 order by puntos desc limit 4 offset 5;
 
 SELECT * FROM liga.equipos ORDER BY PUESTO ASC;
+
+-- 20 ¿Cual es el equipo que mas partidos ha ganado en casa ?
+select  equp.nombre, count(equp.P_GANADOS) as ganados_en_casa
+from equipos equp
+inner join partidos par  on  par.Id_Local= equp.id_equipo
+where resultado = 'L'
+GROUP BY EQUP.NOMBRE
+order by ganados_en_casa DESC LIMIT 3 ;
+
+-- 21 Cual es el que mas ha empatado
+
+select nombre, P_empatados
+from equipos 
+order by  P_EMPATADOS desc limit 1
+;
+
+
  
  
  
