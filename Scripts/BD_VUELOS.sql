@@ -59,9 +59,154 @@ INSERT INTO VIAJES VALUES(DEFAULT, 1, 2, NULL, NULL), (DEFAULT, 1, 3, NULL, NULL
                          (DEFAULT, 5, 1, NULL, NULL), (DEFAULT, 5, 2, NULL, NULL),(DEFAULT, 5, 3, NULL, NULL),
                          (DEFAULT, 5, 4, NULL, NULL), (DEFAULT, 6, 1, NULL, NULL),(DEFAULT, 6, 2, NULL, NULL),
                          (DEFAULT, 6, 3, NULL, NULL), (DEFAULT, 6, 4, NULL, NULL),(DEFAULT, 6, 5, NULL, NULL);
+                         
+-- ------------------------------------------ACTUALIZAMOS LOS VIAJES -----------------------------------------------                         
                              
                        
-    
+    -- ------------------------------EXPORTACION EN CSV DE VIAJES -------------------------------
+SELECT ID_VUELO,
+ A_ORIGEN.NOMBRE AS A_ORIGEN,
+ A_DESTINO.NOMBRE AS A_DESTINO,
+ VIAJES.DURACION,
+ VIAJES.FECHA_HORA
+FROM VIAJES
+INNER JOIN AEROPUERTOS A_ORIGEN ON VIAJES.ID_ORIGEN = A_ORIGEN.ID_AEROPUERTO
+INNER JOIN AEROPUERTOS A_DESTINO ON VIAJES.ID_DESTINO = A_DESTINO.ID_AEROPUERTO;
+
+-- --------------------CORREGIMOS LAS TILDES-------------------------------------------------
+UPDATE VIAJES
+SET A_ORIGEN = 'Milán' 
+where A_ORIGEN = 'Milan' ;
+
+UPDATE VIAJES
+SET A_ORIGEN = 'París'
+where A_ORIGEN = 'Paris';
+
+UPDATE VIAJES
+SET A_DESTINO = 'Milán' 
+where A_DESTINO = 'Milan' ;
+
+UPDATE VIAJES
+SET A_DESTINO = 'París'
+where A_DESTINO = 'Paris';
+
+-- ------------------------------METEMOS MAS CAMPOS A LA TABLE VIAJES --------------------------
+
+ALTER TABLE VIAJES
+ADD PAIS_ORIGEN VARCHAR (50)  AFTER A_ORIGEN,
+ADD PAIS_DESTINO VARCHAR (50) AFTER A_DESTINO;
+
+UPDATE VIAJES
+SET PAIS_ORIGEN = 'España'
+where A_ORIGEN = 'Oviedo' or A_ORIGEN = 'Madrid'  or A_ORIGEN = 'Barcelona';
+
+UPDATE VIAJES
+SET PAIS_DESTINO = 'España'
+where A_DESTINO = 'Oviedo' or A_DESTINO = 'Madrid'  or A_DESTINO = 'Barcelona';
+
+UPDATE VIAJES
+SET PAIS_ORIGEN = 'Francia'
+where A_ORIGEN = 'París' ;
+
+UPDATE VIAJES
+SET PAIS_DESTINO = 'Francia'
+where A_DESTINO = 'París' ;
+
+
+UPDATE VIAJES
+SET PAIS_ORIGEN = 'Reino Unido'
+where A_ORIGEN = 'Londres' ;
+
+UPDATE VIAJES
+SET PAIS_DESTINO = 'Reino Unido'
+where A_DESTINO = 'Londres' ;
+
+UPDATE VIAJES
+SET PAIS_ORIGEN = 'Italia'
+where A_ORIGEN = 'Milán' ;
+
+UPDATE VIAJES
+SET PAIS_DESTINO = 'Italia'
+where A_DESTINO = 'Milán' ;
+
+UPDATE VIAJES
+SET PAIS_ORIGEN = UPPER(PAIS_ORIGEN)
+WHERE ID_VUELO >0;
+
+UPDATE VIAJES
+SET PAIS_DESTINO = UPPER(PAIS_DESTINO)
+WHERE ID_VUELO >0;
+
+-- -------------------------------------- METEMOS UNA COLUMNA MAS DEL TIPO DIRECTO O CON ESCALA--------------------------------------------
+
+ALTER TABLE VIAJES
+ADD TIPO_VUELO VARCHAR (10)  AFTER PAIS_DESTINO;  
+
+UPDATE VIAJES
+SET TIPO_VUELO = 'CON ESCALA'
+WHERE ID_VUELO IN (2,4,6,8,10,12,14,16,18,20,22,24,26,28,30);  
+
+UPDATE VIAJES
+SET TIPO_VUELO = 'DIRECTO'
+WHERE ID_VUELO IN (1,3,5,7,9,11,13,15,17,19,21,23,25,27,29);
+
+-- -----------------------------------------METEMOS UNA COLUMNA MAS DE LA COMPAÑIA----------------------   
+
+ALTER TABLE VIAJES
+ADD COMPANIA VARCHAR (30)  AFTER PAIS_DESTINO;
+
+UPDATE VIAJES
+SET COMPANIA = 'EasyJet'
+WHERE A_ORIGEN = 'Oviedo' AND  A_DESTINO= 'Londres' 
+OR  A_DESTINO = 'Oviedo' AND A_ORIGEN = 'Londres'; 
+
+UPDATE VIAJES
+SET COMPANIA = 'EasyJet'
+WHERE A_ORIGEN = 'Oviedo' AND  A_DESTINO= 'Madrid' 
+OR  A_DESTINO = 'Oviedo' AND A_ORIGEN = 'Madrid'; 
+
+UPDATE VIAJES
+SET COMPANIA = 'Avianca'
+WHERE ID_VUELO IN (2,4,5); 
+
+UPDATE VIAJES
+SET COMPANIA = 'Air Italia'
+WHERE ID_VUELO between 11 and 17;
+
+UPDATE VIAJES
+SET COMPANIA = 'EasyJet'
+WHERE ID_VUELO between 19 and 25; 
+
+UPDATE VIAJES
+SET COMPANIA = 'Air France'
+WHERE ID_VUELO between 26 and 30; 
+
+UPDATE VIAJES
+SET COMPANIA = 'Air France'
+WHERE ID_VUELO between 6 and 9;
+
+-- ---------------------------------------------NORMALIZAMOS LAS TABLAS, SEGUN LA FN1------------------
+
+ALTER TABLE VIAJES
+ADD HORA TIME;
+
+ALTER TABLE VIAJES
+ADD FECHA DATE;
+
+
+UPDATE VIAJES
+SET HORA = TIME(FECHA_HORA)
+WHERE ID_VUELO > 0;
+
+
+UPDATE VIAJES
+SET FECHA = DATE(FECHA_HORA)
+WHERE ID_VUELO > 0;
+
+-- ----------------------------------AHORA BORRAMOS EL CAMPO FECHA_HORA------------------------------
+
+ALTER TABLE VIAJES
+DROP COLUMN FECHA_HORA;
     
   
     
