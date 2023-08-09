@@ -41,3 +41,11 @@ SELECT CONCAT(A_ORIGEN, ' ( ' ,PAIS_ORIGEN,  ' )') AS 'AEROPUERTO DE ORIGEN',
 FROM VIAJES
 WHERE FECHA = '20230808';
 
+-- -------------------------------QUIERO SELECCIONAR LOS VUELOS QUE HAY ENTRE EL 1208 Y AL 1508------------------------
+
+SELECT *
+FROM VIAJES
+WHERE FECHA BETWEEN 20230812 AND 20230815;
+
+
+-- ---------------------------------------empezamos

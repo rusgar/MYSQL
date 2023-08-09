@@ -1,0 +1,29 @@
+DROP TABLE IF EXISTS TIPO_VUELO;
+CREATE TABLE TIPO_VUELO(
+ID_TIPO CHAR(1),
+TIPO_VUELO CHAR(20),
+PRIMARY KEY (ID_TIPO),
+CONSTRAINT CHK_VALUE CHECK(ID_TIPO IN ('V', 'F'))
+);
+
+INSERT INTO TIPO_VUELO VALUES('V', 'Directo'),('F','Con escala');
+
+-- -----------------------------Empezamos a desnormalizacion ------------------------
+
+ALTER TABLE VIAJES
+ADD ID_TIPO_VUELO CHAR(1)
+CHECK(ID_TIPO_VUELO IN ('V', 'F'))
+AFTER TIPO_VUELO;
+
+UPDATE VIAJES
+SET ID_TIPO_VUELO = 'V'
+WHERE TIPO_VUELO = 'Directo';
+
+UPDATE VIAJES
+SET ID_TIPO_VUELO = 'F'
+WHERE TIPO_VUELO = 'Con escala';
+
+ALTER TABLE VIAJES
+DROP TIPO_VUELO;
+
+-- ----------------------------------
