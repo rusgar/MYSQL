@@ -101,5 +101,37 @@ CREATE TABLE DETALLES_VUELO (
     CHECK (ID_TIPO IN ('V', 'F'))
 );
 
- -- CALL RELLENAR_TRAYECTOS();
+-- -----------------------------  hORARIOS DE PARIS A MILAN  ----------------------------------------------------------------------
 
+SELECT A_ORIGEN AS 'AEROPUERTO ORIGEN', A_DESTINO AS 'AEROPUERTO DESTINO',DURACION,FECHA,HORA
+FROM VIAJES
+WHERE A_ORIGEN= 'PARIS' AND A_DESTINO = 'Milan';
+
+
+SELECT ORIGEN.NOMBRE,
+       DESTINO.NOMBRE,
+       DETALLES_VUELO.DURACION,
+       DETALLES_VUELO.FECHA,
+       DETALLES_VUELO.HORA
+       FROM DETALLES_VUELO
+       INNER JOIN TRAYECTO ON DETALLES_VUELO.ID_TRAYECTO = TRAYECTO.ID_TRAYECTO
+       INNER JOIN AEROPUERTOS ORIGEN ON ORIGEN.ID_AEROPUERTO = TRAYECTO.ID_ORIGEN
+       INNER JOIN AEROPUERTOS DESTINO ON DESTINO.ID_AEROPUERTO = TRAYECTO.ID_DESTINO
+       WHERE ORIGEN.NOMBRE = 'Paris' AND DESTINO.NOMBRE = 'Milan';
+       
+ -- ----------------------------- cuantos vuelos opera Air Italia el dia 10/08---------------
+ 
+ select count(compania) as 'Numero de vuelos'
+ from viajes
+ where fecha = 20230810 and compania = 'Air Italia';
+ 
+ 
+ select compania.nombre, detalles_vuelo.fecha
+ from compania inner join detalles_vuelo on compania.id_compania = detalles_vuelo.ID_COMPANIA
+ where compania.nombre = 'Air Italia' and detalles_vuelo.fecha = 20230810;
+   
+  -- ----------------------------- SABER CUANTOS VUELOS DIRECTO TIENE EASYJET, NOMBRE ORIGEN Y DESTINO------------
+  
+  SELECT VIAJES.A_ORIGEN, VIAJES.A_DESTINO, VIAJES.COMPANIA, TIPO_VUELO.ID_TIPO
+  FROM VIAJES INNER JOIN TIPO_VUELO ON VIAJES.ID_TIPO_VUELO = TIPO_VUELO.ID_TIPO
+  WHERE VIAJES.COMPANIA = 'Easyjet' AND TIPO_VUELO.TIPO_VUELO = 'dIRECTO';

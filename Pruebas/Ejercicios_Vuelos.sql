@@ -48,4 +48,49 @@ FROM VIAJES
 WHERE FECHA BETWEEN 20230812 AND 20230815;
 
 
--- ---------------------------------------empezamos
+-- ---------------------------------------Ojo a tener en cuenta al cargar el CSV POR SI HAY FALTAS -----------------
+
+ALTER TABLE VIAJES MODIFY COLUMN HORA TIME;
+
+UPDATE VIAJES
+SET A_ORIGEN = 'Milán' 
+where A_ORIGEN = 'MilÃ¡n' ;
+
+UPDATE VIAJES
+SET A_ORIGEN = 'París'
+where A_ORIGEN =  'ParÃ­s';
+
+UPDATE VIAJES
+SET A_DESTINO = 'Milán' 
+where A_DESTINO ='MilÃ¡n' ;
+
+UPDATE VIAJES
+SET A_DESTINO = 'París'
+where A_DESTINO = 'ParÃ­s';
+
+
+UPDATE VIAJES
+SET pais_origen = 'España' 
+where pais_origen ='EspaÃ±a'
+ ;
+
+UPDATE VIAJES
+SET pais_DESTINO = 'España'
+where pais_DESTINO = 'EspaÃ±a';
+
+DELETE FROM VIAJES
+WHERE HORA LIKE  '%%:%%:12';
+
+
+-- ------------------------------------QUE VUELOS SALEN DE MILAN Y SU DESTINO----------------------------
+
+SELECT  ID_TIPO_VUELO, A_ORIGEN, COMPANIA, A_DESTINO, FECHA
+FROM VIAJES
+WHERE A_ORIGEN = 'Milan';
+
+-- -----------------------------------------PERO QUEREMOS SABER CUALES SON DIRECTOS ---------------------------
+
+SELECT  TIPO_VUELO, A_ORIGEN, COMPANIA, A_DESTINO, FECHA
+FROM VIAJES
+INNER JOIN TIPO_VUELO ON VIAJES.ID_TIPO_VUELO = TIPO_VUELO.ID_TIPO
+WHERE A_ORIGEN = 'Milan' AND ID_TIPO_VUELO = 'V';

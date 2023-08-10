@@ -1,3 +1,7 @@
+USE VUELOS;
+
+
+-- ------------------------------------------------RELLENAR VIAJES DESTINO------------------------------------------------
 delimiter //
 DROP PROCEDURE IF EXISTS RELLENAR_VIAJES_DESN//
 CREATE PROCEDURE RELLENAR_VIAJES_DESN( )
@@ -44,8 +48,8 @@ END
                                                        
 //          
 
-call vuelos.RELLENAR_VIAJES_DESN();                                           
-                                                       
+                                          
+ -- -----------------------------------------ACTUALIZAR VUELOS--------------------------------------------------                                                      
                                                        
 USE VUELOS;
 
@@ -64,9 +68,11 @@ BEGIN
 			SET V_OFFSET = V_POSICION - 1; 
 			SELECT A_ORIGEN,A_DESTINO, FECHA
 				FROM VIAJES
-				ORDER BY A_ORIGEN ASC,
-                         A_DESTINO ASC,
-						 FECHA DESC
+				ORDER BY  FECHA ASC,
+                          HORA ASC,
+                          A_ORIGEN ASC,
+                         A_DESTINO DESC,
+						 FECHA ASC
 					LIMIT 1 OFFSET V_OFFSET 
 								INTO @A_ORIGEN,@A_DESTINO, @FECHA; 
 			
@@ -80,4 +86,47 @@ BEGIN
     END WHILE;
 END //
 DELIMITER ;
-                                                       
+
+-- ----------------------------Rellenar Vuelos--------------------------------------------
+      
+      
+DELIMITER $$
+	DROP PROCEDURE IF EXISTS RELLENAR_DETALLES_VUELO$$
+    CREATE PROCEDURE RELLENAR_DETALLES_VUELO()
+		BEGIN
+		   DECLARE V_CONTADOR INT; 
+            SET V_CONTADOR = 1;
+            WHILE V_CONTADOR <= 60 DO
+            
+				SELECT COMPANIA.ID_COMPANIA 
+				FROM VIAJES
+                INNER JOIN COMPANIA ON VIAJES.COMPANIA = COMPANIA.NOMBRE
+                WHERE ID_VUELO = V_CONTADOR
+                INTO @ID_COMPANIA;
+                
+                 SELECT A_ORIGEN, A_DESTINO,ID_TIPO_VUELO, FECHA,HORA,DURACION
+                FROM VIAJES
+                WHERE ID_VUELO = V_CONTADOR
+                INTO @A_ORIGEN, @A_DESTINO, @ID_TIPO, @FECHA, @HORA,@DURACION;
+                
+                SELECT TRAYECTO.ID_TRAYECTO
+                FROM TRAYECTO INNER JOIN AEROPUERTOS ORIGEN ON ORIGEN.ID_AEROPUERTO = TRAYECTO.ID_ORIGEN
+                              INNER JOIN AEROPUERTOS DESTINO ON DESTINO.ID_AEROPUERTO = TRAYECTO.ID_DESTINO
+                              WHERE ORIGEN.NOMBRE =@A_ORIGEN AND DESTINO.NOMBRE = @A_DESTINO
+                               INTO @ID_TRAYECTO;
+                
+               
+                
+				INSERT INTO DETALLES_VUELO VALUES(DEFAULT,
+														@ID_TRAYECTO,
+														@ID_COMPANIA,
+                                                        @ID_TIPO,
+                                                        @DURACION,
+														@FECHA,
+                                                        @HORA);
+				SET V_CONTADOR = V_CONTADOR + 1;
+	                			
+            END WHILE;
+            
+        END
+$$          
