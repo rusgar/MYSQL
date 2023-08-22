@@ -1,4 +1,4 @@
--- VENTAS
+ use VENTAS;
 
 -- 1. Calcula la cantidad total que suman todos los pedidos que aparecen en la tabla pedido.
 

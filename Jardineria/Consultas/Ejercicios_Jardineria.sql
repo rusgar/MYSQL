@@ -1,3 +1,5 @@
+Use jardineria;
+
 -- Devuelve un listado con el código de oficina y la ciudad donde hay oficinas.
 SELECT CODIGO_OFICINA, CIUDAD
 FROM OFICINA;
@@ -119,3 +121,13 @@ where  gama = 'Ornamentales' and cantidad_en_stock > 100 order by precio_venta d
 select *
 from cliente
 where  ciudad = 'Madrid' and  codigo_empleado_rep_ventas in (11,30);
+
+
+-- 1 devuelve una lista con todos los productos que se han pagado por cheque 
+select pedido.codigo_pedido, pago.forma_pago, sum(detalle_pedido.precio_unidad* detalle_pedido.cantidad) as 'Precio'
+ from producto join detalle_pedido on producto.codigo_producto = detalle_pedido.codigo_producto 
+inner join pedido on detalle_pedido.codigo_pedido = pedido.codigo_pedido 
+inner join cliente on pedido.codigo_cliente = cliente.codigo_cliente
+inner join  pago on cliente.codigo_cliente = pago.codigo_cliente
+where pago.forma_pago  like '%Cheque%'
+group by  pago.forma_pago,pedido.codigo_pedido;

@@ -1,3 +1,0 @@
--- Devuelve un listado de todos los pedidos que fueron entregados  en desde el 01/01/2009 hasta el 31/04/2009.
--- Devuelve el nombre del cliente con mayor limnite de credito y que resida en Humanes.
---  Lista el nombre del producto más caro segun su precio de venta que pertenecen a la gama Frutales

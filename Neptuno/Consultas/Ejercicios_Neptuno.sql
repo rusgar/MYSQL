@@ -1,4 +1,129 @@
--- 1.- Hallar toda las compañias de envío
+-- Practicas con la tabla neptuno
+ USE NEPTUNO;
+
+
+
+
+-- -- 1)	Calcular el total de cada pedido con su identidficador
+SELECT	IdPedido, sum(PrecioUnidad * Cantidad) as total
+FROM	detallespedidos
+GROUP by IdPedido;
+
+
+
+-- 2)	Mostrar el importe total de los pedidos 10501 y 10503 usando únicamente la tabla detalles.
+select * 
+from detallespedidos 
+where IdPedido in ('10501' , '10503');
+
+
+-- 3)	¿Cuánto se factura Agosto 1996?
+
+select sum(Detallespedidos.Cantidad * Detallespedidos.PrecioUnidad)	as 'Facturacion de Agosto' 
+from Detallespedidos inner join Pedidos on Detallespedidos.IdPedido = Pedidos.IdPedido
+where Pedidos.FechaPedido >='1996/08/01' and Pedidos.FechaPedido <='1996/08/30';
+
+-- 4)	Los pedidos que hizo la empleado Robert.
+
+select IdPedido, nombre
+from Pedidos
+inner join Empleados on Pedidos.IdEmpleado = Empleados.IdEmpleado 
+where	Empleados.Nombre = 'Robert';
+
+-- 5)	Mostrar los pedidos de BLONP (código cliente), con su nombre 
+
+select Pedidos.IdPedido , Clientes.IdCliente, Clientes.NombreContacto as ' Nombre'
+from Pedidos inner join Clientes on Clientes.IdCliente = Pedidos.IdCliente 
+where Clientes.IdCliente = 'BLONP';
+
+
+-- 6)	Clientes que pidieron chocolate en mes de enero de 1997
+
+select Productos.NombreProducto , IdCliente
+from Productos
+inner join Detallespedidos on Detallespedidos.IdProducto = Productos.IdProducto
+inner join Pedidos on Pedidos.IdPedido = Detallespedidos.IdPedido 
+where NombreProducto like '%Chocolate%' and Pedidos.FechaPedido between '1997/01/01'  and '1997/01/31';
+
+
+-- 7)	Cuántos productos hay de cada categoría y el precio medio
+
+
+select   categorias.NombreCategoria as ' Productos', COUNT(productos.IdCategoria) as 'Productos hay por categoria', AVG(productos.PrecioUnidad) as 'Precio Medio'
+from Productos inner join categorias on  productos.IdCategoria = categorias.IdCategoria
+group by productos.IdCategoria  Order by   AVG(productos.PrecioUnidad) asc;
+
+
+-- 8)	Mostar el nombre de los empleados  y ordenarlos de mayor a menor junto con su facturacion
+select empleados.nombre, truncate(SUM(Detallespedidos.PrecioUnidad*Detallespedidos.Cantidad),2) as 'ventas'
+from Detallespedidos inner join Pedidos on Pedidos.IdPedido = Detallespedidos.IdPedido
+inner join empleados on Pedidos.IdEmpleado = empleados.IdEmpleado
+group by empleados.nombre order by  'ventas' desc;
+
+
+
+-- 9)  Mostrar el número de pedido y la cantidad del el país del cliente de los pedidos de Julio del año 1996
+select Detallespedidos.IdPedido ,Detallespedidos.Cantidad, Clientes.Pais
+from Clientes inner join Pedidos on pedidos.IdCliente = Clientes.IdCliente
+inner join Detallespedidos on Detallespedidos.IdPedido = Pedidos.IdPedido
+where Pedidos.FechaPedido >='1996/07/01' and Pedidos.FechaPedido <='1996/07/31';
+
+-- 10) Obtener, del pedido 10304, su id, el nombre del cliente,el nombre y apellidos del empleado, la fecha del pedido y el importe total de dicho pedido 
+	
+SELECT	pedidos.IdPedido, clientes.NombreCompañia as 'Cliente', concat(empleados.Apellidos, '--- ' ,empleados.Nombre) as Empleado,
+		pedidos.FechaPedido, format(sum(detallespedidos.Cantidad * detallespedidos.PrecioUnidad ),2  ) as Total
+FROM	Pedidos 
+LEFT 	JOIN Clientes  on(Pedidos.IdCliente = Clientes.IdCliente)
+LEFT	JOIN Empleados on(Pedidos.IdEmpleado = Empleados.IdEmpleado)
+		JOIN Detallespedidos  on(Pedidos.IdPedido = Detallespedidos.IdPedido)
+WHERE	Pedidos.IdPedido = 10304
+GROUP by Pedidos.IdPedido, Clientes.NombreCompañia, Pedidos.FechaPedido;
+         
+-- 11) Obtener el Nombre del producto, el nombre de su categoria y 	el precio, de aquellos productos cuyo precio sea superior a la media del precio de los productos de su categoria,
+-- ordenados por precio de mayor a menor.
+
+
+SELECT	productos.NombreProducto, categorias.NombreCategoria, productos.PrecioUnidad
+FROM	Productos JOIN	Categorias  on(productos.IdCategoria = categorias.IdCategoria)
+WHERE	productos.PrecioUnidad > (SELECT	avg(productos.PrecioUnidad)
+								  FROM		Productos as productos
+								  WHERE	productos.IdCategoria = productos.IdCategoria)
+ORDER by productos.PrecioUnidad DESC;
+
+-- 12) Mostrar los pedidos que tienen productos de las categorías Lacteos o Frutas/verduras.
+
+select Pedidos.IdPedido , Pedidos.IdCliente , Categorias.NombreCategoria
+from Pedidos inner join Detallespedidos on Detallespedidos.IdPedido =Pedidos.IdPedido
+inner join Productos on Productos.IdProducto =Detallespedidos.IdProducto
+inner join Categorias on Categorias.IdCategoria = Productos.IdCategoria
+ where Categorias.NombreCategoria = 'Lacteos' or Categorias.NombreCategoria = 'Frutas/verduras';
+ 
+ 
+ 
+ -- 13)  Mostar todas las ventas que se realizaron desde España
+ 
+ 
+ select pedidos.CiudadDestinatario, pedidos.PaisDestinatario
+ from  pedidos inner join detallespedidos on Detallespedidos.IdPedido = pedidos.IdPedido
+ inner join Clientes on clientes.IdCliente = Pedidos.IdCliente
+ where clientes.Pais = 'España';
+ 
+ 
+ -- 11) Obtener el nombre de los tres clientes que mas ha facturado y el total de su facturacion
+ 
+ select  clientes.NombreCompañia, round(sum(detallespedidos.cantidad * detallespedidos.PrecioUnidad),2) as 'Total'
+ from clientes join pedidos on clientes.idCliente=pedidos.idCliente
+ join detallespedidos on pedidos.IdPedido=detallespedidos.idPedido
+ group by clientes.NombreCompañia
+ order by round(sum(detallespedidos.cantidad * detallespedidos.PrecioUnidad),2) desc limit 3;
+ 
+ -- 12)Obtener el nombre de sus empleados y el de su jefe
+ 
+ select  empleados.Nombre as 'Empleados', emp.Nombre as 'Jefe'
+ from empleados left join empleados emp on empleados.jefe= emp.IdEmpleado;
+ 
+ 
+ -- 1.- Hallar toda las compañias de envío
 
 SELECT *
 FROM compañiasenvios;
@@ -299,110 +424,6 @@ from productos;
   where year(ped.FechaPedido) >= '1997'  and  datediff( ped.FechaEntrega, ped.FechaPedido) < 30 ;
 
 
-#Se desea ver el nombreProducto, precioUnidad y 
-#unidadesEnExistencia de todos los PRODUCTOS 
-#ordenados descendentemente por el precioUnidad.
-select  NombreProducto,PrecioUnidad, UnidadesEnExistencia
-from productos
- order by PrecioUnidad desc;
 
 
 
-#Se desea ver el nombreCompañia, Ciudad y Pais de todos los
- #CLIENTES ordenados ascendentemente primero por el Pais, 
- #después por la Ciudad y por último por el nombreCompañia.
- 
-select nombrecompañia, ciudad, pais
-from clientes
-order by pais, ciudad, nombrecompañia;
-
-#Se desea ver el nombreProducto, precioUnidad y unidadesEnExistencia 
-#de los 8 PRODUCTOS más caros. 
- select nombreProducto, precioUnidad, UnidadesEnExistencia
- from productos
-order by PrecioUnidad  desc limit 8;
-
-#Se desea ver el nombreProducto, precioUnidad y
-# unidadesEnExistencia de los 6 productos siguientes al 4º producto más caro. 
- select nombreProducto, precioUnidad, UnidadesEnExistencia
- from productos
-order by PrecioUnidad  desc limit 4,6;
-
-#seleccionar todos los paises de los cliente agrupado por pais
-select  distinct pais
-from clientes;
-
-#Calcular el número de CLIENTES que tenemos en cada país.
-select count(IdCliente) as 'clientes',   pais
-from clientes
-group by Pais  order by Pais asc;
-
-# mostrar el número de clientes de los paisis que empiezan por A
-
-select count(IdCliente) as 'clientes',   pais
-from clientes
-where Pais like 'A%'
-group by Pais ;
-
-#Mostrar el número de PEDIDOS realizados cada año.
-# Recordad que existe una función llamada YEAR(fecha) 
-#que devuelve el año de una fecha. Agrupar utilizando esta función
-
-select count(idpedido) as ' Numero de pedidos' ,year( fechapedido) as 'año'
-from pedidos
-group by año;
-
-#Mostrar cuánto hemos vendido (Cargo de PEDIDOS)
-# agrupando los resultados por año y 
-#por PaisDestinatario de los pedidos.
- select  PaisDestinatario,year(FechaPedido) as 'año', lpad(concat(format(sum(cargo),2), ' €'),10, '__')as 'pedidos'
- from pedidos
- group by year(FechaPedido), PaisDestinatario order by PaisDestinatario, year(FechaPedido) ;
-
-
- #Ver los datos de todos los empleados cuya
- #fecha de contratación sea anterior a la 
- #fecha del primer pedido que ha recibido la empresa
- 
-select  empleados.Nombre, empleados.FechaContratacion, pedidos.FechaPedido
-from empleados 
-inner join pedidos on empleados.IdEmpleado=pedidos.IdEmpleado
-group by pedidos.IdEmpleado, pedidos.FechaPedido
-having   empleados.FechaContratacion < min(pedidos.FechaPedido);
- 
- 
- SELECT Empleados.FechaContratacion, pedidos.FechaPedido
-FROM Empleados
-WHERE FechaContratacion < (
-SELECT FechaPedido
-FROM Pedidos
-order by FechaPedido limit 1
-);
-
-
- #Ver los datos de todos los empleados cuya
- #fecha de contratación  copn antiguedad de 3 años sea anterior a la 
- #fecha del primer pedido que ha recibido la empresa
- 
-SELECT Emp.Nombre, Emp.FechaContratacion, Ped.PrimeraFechaPedido
-FROM Empleados  Emp
-INNER JOIN ( SELECT MIN(FechaPedido) AS PrimeraFechaPedido
-			FROM Pedidos) AS Ped
-            ON  adddate(Emp.FechaContratacion, 365*3) < (Ped.PrimeraFechaPedido)
-            order by Emp.FechaContratacion ;
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
