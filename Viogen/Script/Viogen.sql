@@ -23,6 +23,7 @@ CREATE TABLE USUARIAS (
     DIRECCION VARCHAR(200),
     CP CHAR(5),
     COD_RIESGO CHAR(1),
+    -- solicita_op
     INFO_RAI CHAR(1) DEFAULT '',
     INFO_PAGO_UNICO CHAR(1) DEFAULT '',
     INFO_VIPASA CHAR(1) DEFAULT '',
@@ -111,7 +112,7 @@ CREATE TABLE MEDIDAS (
 
 
 INSERT INTO JURISDICCION VALUES ('C', 'Civil'), ('P', 'Penal');
-INSERT INTO RIESGO VALUES ('E', 'Extremo'), ('A', 'Alto'),('M', 'Medio'),('B', 'Bajo'),('N', 'Nulo');
+INSERT INTO RIESGO VALUES ('E', ' Riesgo Extremo'), ('A', 'Riesgo Alto'),('M', ' Riesgo Medio'),('B', ' Riesgo Bajo'),('N', 'Nulo');
 
 
 
