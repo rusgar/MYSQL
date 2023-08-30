@@ -6,6 +6,7 @@ CREATE PROCEDURE ALTA_USUARIA(IN PE_DNI CHAR(9),
 							  IN PE_NOMBRE VARCHAR(100),
                               IN PE_APELLIDO1 VARCHAR(100),
 							  IN PE_APELLIDO2 VARCHAR(100),
+                              IN PE_NACIONALIDAD VARCHAR(40),
 							  IN PE_TELEFONO VARCHAR(12),
 							  IN PE_DIRECCION VARCHAR(200),
 							  IN PE_CP CHAR(5),
@@ -17,7 +18,7 @@ BEGIN
 
  -- EN CASO DE QUE NI dni NI bie TUVIESE INFORMACION LANZARIAMOS UNA EXCEPCION PERSONALIZADA
     
-    IF PE_DNI = '' AND PR_NIE = '' THEN
+    IF PE_DNI = '' AND PE_NIE = '' THEN
        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ES NECESARIO TERNE CORRECTAMENTE LOS CAMPOS VALIDOS ';
     
     
@@ -30,6 +31,7 @@ BEGIN
 							          PE_NOMBRE,
 									  PE_APELLIDO1 ,
 									  PE_APELLIDO2 ,
+                                       PE_NACIONALIDAD,
 									  PE_TELEFONO ,
 									  PE_DIRECCION,
 									  PE_CP,
@@ -43,6 +45,7 @@ BEGIN
                                       
          SELECT CONCAT_WS( ' / ', DNI ,  NOMBRE,  APELLIDO1 ,					         
 									  APELLIDO2 ,
+                                      NACIONALIDAD,
 									  TELEFONO ,
 									  DIRECCION,
 									  CP,
@@ -89,8 +92,9 @@ DELIMITER $$
 	BEGIN
 		SELECT COD_ORDEN
 			FROM ORDEN_PROTEC
-            WHERE COD_ORDEN = PE_COD_ORDEN;
-		IF (row_count()) <= 0 THEN
+            WHERE COD_ORDEN = PE_COD_ORDEN
+            INTO @COD_ORDEN;
+		IF @COD_ORDEN IS NULL THEN
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Aún no ha sido creada la OP asociada
 													   a esta medida.';
         ELSE

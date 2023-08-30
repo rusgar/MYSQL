@@ -116,29 +116,28 @@ INSERT INTO RIESGO VALUES ('E', ' Riesgo Extremo'), ('A', 'Riesgo Alto'),('M', '
 
 
 
-/*INSERT INTO USUARIAS VALUES(DEFAULT, '11111111B',  'Melba',       'Wulfinger',    'Limb',      '132456987', 'Cheban',              '32165', 'A', DEFAULT, DEFAULT, DEFAULT, DEFAULT);              
-INSERT INTO USUARIAS VALUES(DEFAULT, '21111111B',  'Maryrose',    'Easson',       'Posten',    '132456987', 'Shuinan',             '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);         
-INSERT INTO USUARIAS VALUES(DEFAULT, '31111111B',  'Sophronia',   'Broadfield',   'Maylam',    '132456987', 'Montreuil',           '32165', 'M', DEFAULT, DEFAULT, DEFAULT, DEFAULT);           
-INSERT INTO USUARIAS VALUES(DEFAULT, '41111111B',  'Cybill',      'Robertson',    'Ligerton',  '132456987', 'Tukums',              '32165', 'M', DEFAULT, DEFAULT, DEFAULT, DEFAULT);              
-INSERT INTO USUARIAS VALUES(DEFAULT, '51111111B',  'Fredra',      'Greville',     'Roke',      '132456987', 'Rēzekne',             '32165', 'M', DEFAULT, DEFAULT, DEFAULT, DEFAULT);             
-INSERT INTO USUARIAS VALUES(DEFAULT, '61111111B',  'Gusta',       'Dundendale',   'La Croce',  '132456987', 'Lintan Chengguanzhen','32165', 'M', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '71111111B',  'Janie',       'Hollow',       'Trustram',  '132456987', 'Sātkania',            '32165', 'B', DEFAULT, DEFAULT, DEFAULT, DEFAULT);          
-INSERT INTO USUARIAS VALUES(DEFAULT, '81111111B',  'Vyky',        'Jery',         'Lumm',      '132456987', 'Nice',                '32165', 'B', DEFAULT, DEFAULT, DEFAULT, DEFAULT);              
-INSERT INTO USUARIAS VALUES(DEFAULT, '91111111B',  'Catharine'	, 'Waddilow',     'Eskriett',  '132456987', 'Talata Mafara',       '32165', 'B', DEFAULT, DEFAULT, DEFAULT, DEFAULT);     
-INSERT INTO USUARIAS VALUES(DEFAULT, '10111111B',  'Ruthie' ,   'Canepe',       'Maulin',      '132456987', 'Casillas',            '32165', 'B', DEFAULT, DEFAULT, DEFAULT, DEFAULT);          
-INSERT INTO USUARIAS VALUES(DEFAULT, '11111111B',  'Dolores' ,   'Griffiths',    'Morstatt',   '132456987', 'Fuwen',               '32165', 'B', DEFAULT, DEFAULT, DEFAULT, DEFAULT);             
-INSERT INTO USUARIAS VALUES(DEFAULT, '12111111B',  'Nissie',    'Duncan',       'Butts',       '132456987', 'Öldziyt',             '32165', 'A', DEFAULT, DEFAULT, DEFAULT, DEFAULT);           
-INSERT INTO USUARIAS VALUES(DEFAULT, '13111111B',  'Bennie',    'Mostyn',       'Shackleton',  '132456987', 'Robertsport',         '32165', 'A', DEFAULT, DEFAULT, DEFAULT, DEFAULT);               
-INSERT INTO USUARIAS VALUES(DEFAULT, '14111111B',  'Max',    'Catterill',    'Aird',           '132456987', 'Luleå',               '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '15111111B',  'Clemmy',    'Cheales',      'Dyneley',     '132456987', 'Amnat Charoen',       '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '16111111B',  'Kiley',    'Kinghorne',    'Bummfrey',     '132456987', 'Zhangyelu',           '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '17111111B',  'Odella',    'Thebeaud'	,     'Comport',   '132456987', 'Kiarajangkung',       '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '18111111B',  'Blanca',    'Huygens',      'Kuhn',        '132456987', 'Oslo',                '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '19111111B',  'Coretta',    'Cooling',      'Henriquet',  '132456987', 'Yaita',               '32165', 'N', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '20111111B',  'Myrtie',    'Blakeslee',    'Halbard',     '132456987', 'Baitu',               '32165', 'N', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '21111111B',  'Adoree',    'Mowday',       'Crang',       '132456987', 'Baitu',               '32165', 'N', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '22111111B',  'Arlette	',    'O Shea',       'Balam',     '132456987', 'Galutu',              '32165', 'N', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '23111111B',  'Kristyn	',    'Jirousek',     'Kenewell',  '132456987', 'Jinshiqiao',          '32165', 'N', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '24111111B',  'Ursulina',    'Geach',        'Rheubottom','132456987', 'Janakkala',           '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO USUARIAS VALUES(DEFAULT, '25111111B',  'Kiersten',    'Wakely',       'Goodliffe', '132456987', 'Xike',                '32165', 'E', DEFAULT, DEFAULT, DEFAULT, DEFAULT);*/
+-- ------------------------------------------------------------------------------------------------------------------
 
+
+call viogen.ALTA_USUARIA('12378945A', '', 'Zoa', 'De la Rosa', 'Montero', 'Mexicana', '123456780', 'Barrio exterior', '99999', 'A', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945B', '', 'Patri', 'De la Rosa', 'Montero', 'Mexicana', '123456781', 'La Descalzada', '99999', 'B', '', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945C', '', 'Rosario', 'De la Rosa', 'Montero', 'Mexicana', '123456782', 'La Descalzada', '99999', 'B', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945D', '', 'Berta', 'De la Rosa', 'Montero', 'Española', '123456783', 'La Descalzada', '99999', 'B', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945E', '', 'Lorena', 'De la Rosa', 'Montero', 'Española', '123456784', 'El Arenal', '99999', 'E', '', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945T', '', 'Maribel', 'De la Rosa', 'Montero', 'Española', '123456785', 'El Arenal', '99999', 'E', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945Y', '', 'Rebeca', 'De la Rosa', 'Montero', 'Española', '123456786', 'El Arenal', '99999', 'B', '', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945U', '', 'Ainoa', 'De la Rosa', 'Montero', 'Francesa', '123456787', 'Pozos del Llano', '99999', 'B', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945I', '', 'Antonia', 'De la Rosa', 'Montero', 'Francesa', '123456788', 'Pozos del Llano', '99999', 'M', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945P', '', 'Fátima', 'Jiménez', 'Fátimez', 'Peruana', '123456777', 'Pozos del Llano', '99999', 'M', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945M', '', 'María', 'De los Ángeles', 'Caídos', 'Peruana', '123256789', 'Pozos del Llano', '99999', 'M', 'X', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945N', '', 'Virtud', 'De los Álamos', 'Montero', 'Magrebí', '123436789', 'Calle Melancolía', '99999', 'M', '', @PS_REGISTRO);
+call viogen.ALTA_USUARIA('12378945Q', '', 'Celeste', 'Noes', 'Uncolor', 'Magrebí', '123456722', 'La Descalzada', '99999', 'A', 'X', @PS_REGISTRO);
+call viogen.ALTA_AGRESOR('45698721J', '', 'Manuel', 'Del Campo ', 'Manuélez');
+call viogen.ALTA_AGRESOR('35698721A', '', 'José', 'Del Campo ', 'Entelequio');
+call viogen.ALTA_AGRESOR('25698721B', '', 'Miguel', 'Del Campo ', 'Abierto');
+call viogen.ALTA_AGRESOR('15698721C', '', 'Mariano', 'Pérez ', 'Eustáquiez');
+call viogen.ALTA_AGRESOR('05698721H', '', 'Ángel', 'García ', 'Bermúdez');
+call viogen.ALTA_AGRESOR('95698721R', '', 'Jonás', 'García ', 'Bermúdez');
+call viogen.ALTA_AGRESOR('85698721J', '', 'Abel', 'Fernández ', 'Trastámara');
+call viogen.ALTA_AGRESOR('75698721G', '', 'Judas', 'Fernández ', 'Noexiste');
+call viogen.ALTA_AGRESOR('65698721Q', '', 'Jeremías', 'Del Campo ', 'Manuélez');
