@@ -115,7 +115,8 @@ DELIMITER $$
 							 IN	PE_COD_AGRESOR INT,
 							 IN	PE_EXPEDIENTE CHAR(20),
 							 IN PE_FECHA_INICIO DATE,
-							 IN PE_FECHA_FIN DATE)
+							 IN PE_FECHA_FIN DATE, 
+                             OUT PS_COD_OP INT)
 	BEGIN
 		SELECT *
 			FROM VINCULOS
@@ -131,6 +132,10 @@ DELIMITER $$
                                          PE_EXPEDIENTE,
                                          PE_FECHA_INICIO,
                                          PE_FECHA_FIN);
+         SELECT COD_ORDEN
+         FROM ORDEN_PROTEC
+         ORDER BY COD_ORDEN DESC LIMIT 1
+         INTO PS_COD_OP;
     END
 $$
 -- --------------------------------------------------------------------------------------------------------

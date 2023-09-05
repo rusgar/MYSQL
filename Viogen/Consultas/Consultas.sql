@@ -54,3 +54,25 @@ CREATE TABLE OBSERVACIONES(
              
 
 );
+
+-- --------------------------------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS TIPOS_MEDIDAS;
+CREATE TABLE TIPOS_MEDIDAS (
+	COD_MEDIDA INT AUTO_INCREMENT,
+    COD_JURISDICCION CHAR(1),
+    TIPO_MEDIDA VARCHAR(300),
+    CONSTRAINT PK_MEDIDAS_CIVILES PRIMARY KEY (COD_MEDIDA),
+    CONSTRAINT FK_TIPOS_MEDIDAS_JURISDICCION FOREIGN KEY (COD_JURISDICCION) REFERENCES JURISDICCION(COD_JURISDICCION) 
+    
+);
+
+INSERT INTO MEDIDAS_PENALES VALUES(DEFAULT, 'Prisión provisional.'),
+								  (DEFAULT, 'Prohibición de aproximación.'),
+                                  (DEFAULT, 'Prohibición de residencia.'),
+                                  (DEFAULT, 'Prohibición de comunicación.'),
+                                  (DEFAULT, 'Retirada de armas u otros objetos peligrosos.'), 
+                                  (DEFAULT, 'Atribución del uso y disfrute de la vivienda familiar.'),
+								  (DEFAULT, 'Determinar el régimen de custodia, visitas, comunicación y estancia con los hijos.'),
+                                  (DEFAULT, 'Régimen de prestación de alimentos'),
+                                  (DEFAULT, 'Cualquier medida de protección al menor para evitar un peligro o perjuicio.');
