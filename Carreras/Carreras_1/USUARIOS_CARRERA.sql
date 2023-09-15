@@ -95,3 +95,9 @@ SET DEFAULT ROLE usuario_apuestas TO  'tranvias27'@'localhost';
 
 -- En el momento de ejecutarse, el servidor lee la información de estas tablas sobre privilegios
 FLUSH PRIVILEGES;
+
+SELECT USER, HOST FROM MYSQL.USER;
+FLUSH PRIVILEGES;
+
+SELECT * FROM MYSQL.USER;
+

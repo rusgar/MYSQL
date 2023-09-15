@@ -41,10 +41,10 @@ GRANT EXECUTE ON PROCEDURE CARRERAS_1.PR_BAJA_CABALLO TO gestor_caballos;
 GRANT EXECUTE ON PROCEDURE CARRERAS_1.PR_APUESTA TO usuario_apuestas;
 
 --  Dale permisos de creación, consulta e inserción sobre las tablas del esquema CARRERAS_1 AL ROL DEL DESARROLLADOR
-GRANT SELECT, INSERT, CREATE, UPDATE, DROP, DELETE ON CARRERAS_1 TO desarrollador;
+GRANT SELECT, INSERT, CREATE, UPDATE, DROP, DELETE ON CARRERAS_1.* TO desarrollador;
 
 -- Dale todos los permisos excepto GRANT OPTION AL ROL ADMIN_ADJ
-GRANT ALL PRIVILEGES ON  CARRERAS_1 TO  admin_adj WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON  CARRERAS_1.* TO  admin_adj ;
 
 
 -- En el momento de ejecutarse, el servidor lee la información de estas tablas sobre privilegios
