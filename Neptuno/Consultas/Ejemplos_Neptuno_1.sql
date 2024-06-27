@@ -293,20 +293,21 @@ where neptuno.empleados.FechaContratacion < ( select MIN(neptuno.pedidos.FechaPe
                                               from neptuno.pedidos)
 group by  neptuno.empleados.Apellidos,neptuno.empleados.Nombre,neptuno.empleados.FechaContratacion;
 
-
-select concat(neptuno.empleados.Nombre, ' ', neptuno.empleados.apellidos) as 'Nombre Completo',neptuno.pedidos.Cargo,
+-- obtener cargo, fechapedido, fecha entrega de todos los pedidos realiados por nancy en 1997
+select concat(neptuno.empleados.Nombre, ' ', neptuno.empleados.apellidos) as 'Nombre Completo',        
        neptuno.pedidos.FechaPedido, neptuno.pedidos.FechaEnvio, neptuno.pedidos.FechaEntrega
 from neptuno.empleados
 inner join neptuno.pedidos
 on neptuno.empleados.IdEmpleado= neptuno.pedidos.IdEmpleado
-where neptuno.empleados.Nombre = 'Nancy' and year(neptuno.pedidos.FechaPedido) = '1997'
-order by year(neptuno.pedidos.FechaPedido) ;
+where neptuno.empleados.Nombre = 'Nancy' and neptuno.empleados.Apellidos ='Davolio'  and year(neptuno.pedidos.FechaPedido) = '1997'
+order by year(neptuno.pedidos.FechaPedido);
+
 
 select  neptuno.clientes.NombreCompañia,neptuno.pedidos.Cargo, neptuno.pedidos.FechaPedido, neptuno.pedidos.FechaEntrega
 from neptuno.pedidos
 inner join neptuno.clientes
 on neptuno.pedidos.IdCliente=neptuno.clientes.IdCliente
-where neptuno.clientes.NombreCompañia = 'Antonio Moreno Taquería' and year(neptuno.pedidos.FechaPedido) ='1998' ;
+where neptuno.clientes.NombreCompañia like '%Antonio Moreno%' and year(neptuno.pedidos.FechaPedido) ='1998' ;
 
 select neptuno.pedidos.IdPedido, neptuno.productos.NombreProducto
 from neptuno.productos
@@ -314,5 +315,6 @@ inner join neptuno.detallespedidos
 on neptuno.productos.IdProducto=neptuno.detallespedidos.IdProducto
 inner join neptuno.pedidos
 on neptuno.detallespedidos.IdPedido=neptuno.pedidos.IdPedido
-where neptuno.pedidos.IdPedido= '10250';
+where neptuno.pedidos.IdPedido= 10250;
+
 
