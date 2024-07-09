@@ -49,4 +49,27 @@ where personas.nombre like '%sam%' and personas.apellido like  '%rai%'  ;
 select peguis.nombre
 from peguis
 where  peguis.nombre  like '%18%';
+
+-- -------------------Llalamos a las funciones para sacar los ID-------------------
+select cine.obtenerIdGenero('terror');
+select cine.obtenerIdPelicula('matrix');
+-- -------------------Llalamos al procedimiento segun las ID anteriormenre-------------------
+
+-- -------------------------Insercion del actor y llamada para su eliminacion si esta creado
+
+insert into
+cine.personas
+(cine.personas.nombre,
+cine.personas.apellido,
+cine.personas.fecha_nacimiento,
+cine.personas.id_nacionalidad)
+values ( 'Keanu', 'Reeves', '1939-05-25', 16);
+
+insert into
+cine.actores
+(cine.actores.salario, cine.actores.id_persona)
+values ( 20, 51); 
+
+call eliminarPersonaDuplicada('kea' , 'Reev');
+
        

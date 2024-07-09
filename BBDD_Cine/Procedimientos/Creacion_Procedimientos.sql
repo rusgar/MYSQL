@@ -133,3 +133,168 @@ set IDActor=obtenerIDActor(nombreActor,apellidoActor);
 
 end
 $$
+
+
+-- Crear un procedimiento que me permita introducir nuevos géneros a películas---------------------------------
+-- -----------Creamos las funciones para obtener el Genero------------------------- 
+DELIMITER $$
+DROP FUNCTION IF EXISTS obtenerIdGenero $$
+CREATE FUNCTION obtenerIdGenero(nombre VARCHAR(80)) RETURNS INT
+BEGIN
+DECLARE retorno INT DEFAULT 0;
+
+SELECT cine.generos.id INTO retorno FROM cine.generos 
+WHERE LOWER(cine.generos.nombre) LIKE CONCAT('%', nombre, '%');
+
+RETURN retorno;
+END $$
+
+-- -----------Creamos las funciones para obtener el IDPelicula------------------------- 
+DELIMITER $$
+DROP FUNCTION IF EXISTS obtenerIdPelicula $$
+CREATE FUNCTION obtenerIdPelicula(titulo VARCHAR(30)) RETURNS INT
+BEGIN
+DECLARE retorno INT DEFAULT 0;
+
+SELECT cine.peliculas.id INTO retorno FROM cine.peliculas 
+WHERE LOWER(cine.peliculas.titulo) LIKE CONCAT('%', titulo, '%');
+
+RETURN retorno;
+END $$
+
+--   ------------------------------------Creamos el procedimientos pa sacar las peliculas por genero aprovechando las funciones anteriores------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS insertarPeliculaGenero $$
+CREATE PROCEDURE insertarPeliculaGenero(IN nombreGenero VARCHAR(80), IN tituloPelicula VARCHAR(30))
+BEGIN
+
+DECLARE idGenero INT DEFAULT 0;
+DECLARE idPelicula INT DEFAULT 0;
+DECLARE numeroCoincidencias INT DEFAULT 0;
+
+SET idGenero = obtenerIdGenero(nombreGenero);
+SET idPelicula = obtenerIdPelicula(tituloPelicula);
+
+SELECT COUNT(cine.peliculas_generos.id) INTO numeroCoincidencias FROM cine.peliculas_generos
+WHERE cine.peliculas_generos.id_genero = idGenero 
+AND cine.peliculas_generos.id_pelicula = idPelicula;
+
+IF numeroCoincidencias = 0 THEN
+	INSERT INTO cine.peliculas_generos(cine.peliculas_generos.id_genero, cine.peliculas_generos.id_pelicula)
+	VALUES (idGenero, idPelicula);
+END IF;
+
+SELECT cine.peliculas_generos.id FROM cine.peliculas_generos
+WHERE cine.peliculas_generos.id_genero = idGenero
+AND cine.peliculas_generos.id_pelicula = idPelicula;
+
+END $$
+
+-- -------------------------------Creacion de un procedimientos para la eliminacion de actores-------------------------
+
+Delimiter $$
+
+drop procedure if exists eliminarPersonaDuplicada$$
+create procedure eliminarPersonaDuplicada ( nombre varchar(80), apellido varchar(80))
+begin
+declare idPersona int default 0;
+declare coincidencias int default 0;
+declare resultado varchar(30) default 'Persona no encontrada';
+declare vNombre varchar(82);
+declare vApellido varchar(82);
+
+set vNombre = lower(concat('%',nombre, '%'));
+set vApellido = lower(concat('%',apellido, '%'));
+
+ -- --------------------------------realizamos la busqueda de personas por nombre y apellido
+select count(cine.personas.id)  into coincidencias from cine.personas
+where cine.personas.nombre
+like vNombre
+and cine.personas.apellido
+like vApellido
+;
+
+if coincidencias > 0 then
+-- --------------------------------obtenemos el personaje duplicado con el id mas bajo
+select cine.personas.id into idPersona
+from cine.personas
+where cine.personas.nombre
+like vNombre
+and cine.personas.apellido
+like vApellido
+order by cine.personas.id asc limit 1;
+	
+-- -------------------En el caso de que exista mas de una vez verificamos si esta asignado a mas de un actor
+-- -------------------y si es el caso asignamos el mismo id_persona a cada actor
+    if coincidencias > 1 then
+    update cine.actores
+    inner join cine.personas on
+    cine.personas.id = cine.actores.id_persona
+    set id_persona = idPersona
+    where cine.personas.nombre
+	like vNombre
+	and cine.personas.apellido
+	like vApellido
+	;
+    
+-- ---------------------Repetimos el procedimiento para comprobar si existen multiples directores de la misma persona
+-- ---------------------y si es el caso asignamos el mismo id_persona a cada director
+    update cine.directores
+    inner join cine.personas on
+    cine.personas.id = cine.directores.id_persona
+    set id_persona = idPersona
+    where cine.personas.nombre
+	like vNombre
+	and cine.personas.apellido
+	like vApellido
+	;
+    
+-- -----------------------por ultimo comprobamos si existen multiples producrores de la misma persona
+-- ------------------------y si es el caso asignamos el mismo id_persona a cada productor
+    update cine.productores
+    inner join cine.personas on
+    cine.personas.id = cine.productores.id_persona
+    set id_persona = idPersona
+    where cine.personas.nombre
+	like vNombre
+	and cine.personas.apellido
+	like vApellido
+	;
+    
+-- ------------------------Ya verificada la inexistencia de coincidencias en las tablas hijas
+-- ------------------------eliminamos los resultados adicionales y nos quedamos con el de id mas baja
+	delete from cine.personas
+	where cine.personas.nombre
+	like vNombre
+	and cine.personas.apellido
+	like vApellido
+	and cine.personas.id != idPersona;
+
+	-- ---------------------mostramos el resultado final
+	select * from cine.personas
+	where cine.personas.nombre
+	like vNombre
+	and cine.personas.apellido
+	like vApellido
+	;
+    
+-- ---------------------------avisar si la persona no esta duplicada
+    else
+    set resultado = concat((select cine.personas.nombre from cine.personas
+	where cine.personas.id = idPersona), ' ', (select cine.personas.apellido from cine.personas
+	where cine.personas.id = idPersona), ' no esta duplicada');
+    select resultado;
+    
+    end if;
+
+-- ---------------------si no se encuentra la persona muestra un aviso
+else
+select resultado
+;
+
+end if;
+
+end
+$$
+
+-- -----------------------------

@@ -3,10 +3,10 @@ use neptuno;
 
 -- --------------------------------------------comnsulta-----------------------------------------
 
--- select directores.id, personas.nombre, personas.apellido
+-- select *
 -- from directores inner join personas
 -- on directores.id_persona = personas.id
--- where personas.nombre like '%peter%' and personas.apellido like  '%jac%'  ;
+-- where personas.nombre like '%fr%' and personas.apellido like  '%cop%'  ;
 
 
 -- ---------------------------------obtener el Iddirector con una funcion--------------------------------
@@ -26,10 +26,10 @@ use neptuno;
   
   -- --------------------------------------------comnsulta-----------------------------------------
 
- -- select productores.id, personas.nombre, personas.apellido
---  from productores inner join personas
---  on productores.id_persona = personas.id
---  where personas.nombre like '%barr%' and personas.apellido like  '%osb%'  ;
+-- select productores.id, personas.nombre, personas.apellido
+-- from productores inner join personas
+-- on productores.id_persona = personas.id
+-- where personas.nombre like '%sam%' and personas.apellido like  '%rai%'  ;
 
 
 -- ---------------------------------obtener el Idproductor con una funcion--------------------------------
@@ -84,7 +84,7 @@ create procedure crearPeliculas( IN titulo varchar(30),
                                              
 begin
 
--- Declaramos la variables--------------------------------------------------------
+-- --------------------------Declaramos la variables--------------------------------------------------------
 declare IdDirector int default 0;
 declare IdProductor int default 0;
 declare IdPegui int default 0;
@@ -94,7 +94,7 @@ set IdDirector=obtenerIdDirector(nombreDirector,apellidoDirector);
 set IdProductor=obtenerIdProductor(nombreProductor,apellidoProductor);
 set IdPegui=obtenerIdPegui(nombrePegui);
 
--- Comprabar si la insercion exsite---------------------------------------------
+-- -----------------Comprabamos si la insercion exsite---------------------------------------------
 
    select count(peliculas.id) into concordancia
    from peliculas
@@ -107,17 +107,20 @@ set IdPegui=obtenerIdPegui(nombrePegui);
     
     
   
+	-- --- La verificación de si la película ya existe se realiza antes de intentar la inserción -------
+     -- -----------Insertamos los datos de  la tabla s de cada uno de ellos segun sus variables----------
      
-     -- Insertmaos de la tabla en cuestion los datos de cada uno de ellos segun sus variables----------
-          insert into peliculas(peliculas.titulo,
-                               peliculas.fecha,
-                               peliculas.duracion,
-                               peliculas.id_director,
-                               peliculas.id_productor,
-                               peliculas.id_pegui)
-                  values (titulo,fecha,duracion, IdDirector, IdProductor ,  IdPegui);
+         if concordancia = 0 then
+              insert into peliculas(peliculas.titulo,
+									peliculas.fecha,
+									peliculas.duracion,
+									peliculas.id_director,
+									peliculas.id_productor,
+									peliculas.id_pegui)
+					values (titulo,fecha,duracion, IdDirector, IdProductor ,  IdPegui);
+        end if;       
                   
-  -- hacemos las consultas de la tabla en cuestion relacionando la bussqueda  y condicion segun las varibales que hemos menciobado
+  -- Realizamos las consultas de la tabla  relacionando la bussqueda  y condicion segun las variables que hemos mencionado
     select peliculas.id
     from peliculas 
     where peliculas.titulo = titulo 
@@ -126,11 +129,8 @@ set IdPegui=obtenerIdPegui(nombrePegui);
     and peliculas.id_director =IdDirector 
     and  peliculas.id_productor = IdProductor
     and  peliculas.id_pegui = IdPegui;
-                  
-  
+             
    
-
-
 
 end
 $$                                             
